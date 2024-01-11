@@ -28,9 +28,7 @@ nextApp.prepare().then(() => {
   });
 
   app.get("/", (req: Request, res: Response) => {
-    const parsedUrl = parse(req.url, true);
-    const { pathname, query } = parsedUrl;
-    nextApp.render(req, res, pathname, query);
+    res.render("/");
   });
 
   app.all("*", (req: Request, res: Response) => {
