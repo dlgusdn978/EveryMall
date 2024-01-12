@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  useFileSystemPublicRoutes: false,
+  // useFileSystemPublicRoutes: false,
 };
 
 module.exports = nextConfig;

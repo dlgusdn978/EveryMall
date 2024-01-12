@@ -1,8 +1,8 @@
-import express, { Request, Response } from "express";
-// const express = require("express");
+// import express, { Request, Response } from "express";
+const express = require("express");
 const { parse } = require("url");
 const next = require("next");
-const apiRouter = require("./routes/apiRouter");
+
 const dotenv = require("dotenv");
 const path = require("path");
 
@@ -19,19 +19,14 @@ const app = express();
 nextApp.prepare().then(() => {
   console.log("서버는 켜짐");
   // server.use("/api", apiRouter);
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  app.use(express.static(path.join(__dirname, "./public")));
 
-  app.use("/", (req: Request, res: Response, next: any) => {
-    res.send("hello");
-  });
+  // app.set("port", port);
 
-  app.get("/", (req: Request, res: Response) => {
-    res.render("/");
-  });
+  // app.use(express.static(path.join(__dirname, "./public")));
 
-  app.all("*", (req: Request, res: Response) => {
+  // app.use("/", require("./routes/apiRouter"));
+
+  app.get("*", (req: Request, res: Response) => {
     return handle(req, res);
   });
 
