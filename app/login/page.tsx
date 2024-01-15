@@ -3,7 +3,7 @@ import Link from "next/link";
 import Input from "../../components/input";
 const Page = () => {
   return (
-    <div className="w-10/12 m-auto">
+    <div className="w-9/12 m-auto">
       <div className="mt-44 mb-88 w-80 mx-auto">
         {/* 로그인 문구*/}
         <div className="text-4xl">로그인</div>
@@ -25,7 +25,7 @@ const Page = () => {
               {/*Link로 대체*/}
               <div className="border-r-2 pr-2">아이디 찾기</div>
               <div className="border-r-2 pr-2">비밀번호 찾기</div>
-              <div>회원 가입</div>
+              <Link href="/signup">회원가입</Link>
             </div>
             <button className="border-2 py-4">카카오 로그인</button>
             <button className="border-2 py-4">네이버 로그인</button>

@@ -3,11 +3,12 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 
 const router = express.Router();
-const { getLogin } = require("../controllers/loginController");
+const { getLogin, getSignUp } = require("../controllers/loginController");
 router.use(cookieParser());
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 router.route("/").get(getLogin);
+router.route("/signUp").post(getSignUp);
 
 module.exports = router;

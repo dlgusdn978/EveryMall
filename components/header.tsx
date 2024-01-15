@@ -4,10 +4,11 @@ import User from "../public/img/icons8-user-32.png";
 import Basket from "../public/img/icons8-basket-60.png";
 import ImageDiv from "../components/image";
 import Link from "next/link";
+import logo from "../public/img/logo.png";
 const Header = () => {
   //필요 : 검색, 마이페이지, 로그인, 장바구니, 로고, 고객센터.
   return (
-    <div className="w-10/12 m-auto h-24">
+    <div className="w-9/12 m-auto h-24">
       <div className="h-2/5 flex space-x-4 justify-end">
         <Link
           href="/login"
@@ -19,9 +20,16 @@ const Header = () => {
           고객센터
         </div>
       </div>
-      <div className="h-3/5 flex justify-between items-center">
-        <div className="w-1/12">
-          <div className="flex justify-center">logo</div>
+      <div className="h-3/5 mx-5 flex justify-between items-center">
+        <div className="w-24 m-5">
+          <Link href="/">
+            <ImageDiv
+              width={logo.width}
+              height={logo.height}
+              src={logo.src}
+              alt={"logo image"}
+            ></ImageDiv>
+          </Link>
         </div>
         <div className="w-3/4">
           {/* 검색 */}
@@ -34,7 +42,7 @@ const Header = () => {
         <div className="flex space-x-4">
           <Link href="/mypage">
             <ImageDiv
-              width={32}
+              width={28}
               height={32}
               src={User.src}
               alt="user"
@@ -42,13 +50,15 @@ const Header = () => {
             />
           </Link>
 
-          <ImageDiv
-            width={32}
-            height={32}
-            src={Basket.src}
-            alt="basket"
-            desc="장바구니"
-          />
+          <Link href="/basket">
+            <ImageDiv
+              width={28}
+              height={32}
+              src={Basket.src}
+              alt="basket"
+              desc="장바구니"
+            />
+          </Link>
         </div>
       </div>
     </div>

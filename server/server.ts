@@ -24,9 +24,16 @@ nextApp.prepare().then(() => {
 
   // app.use(express.static(path.join(__dirname, "./public")));
 
-  // app.use("/", require("./routes/apiRouter"));
+  app.use("/api", require("./routes/apiRouter"));
 
   app.get("*", (req: Request, res: Response) => {
+    console.log("요청 들어옴");
+    return handle(req, res);
+  });
+  app.post("*", (req: Request, res: Response) => {
+    console.log("post 요청");
+    console.log(req.body);
+
     return handle(req, res);
   });
 

@@ -3,21 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next start",
+    "dev": "nodemon --watch ./server/server.ts --exec ts-node ./server/server.ts",
     "build": "next build",
     "start": "nodemon --watch ./server/server.ts --exec ts-node ./server/server.ts",
     "lint": "next lint"
   },
   "dependencies": {
     "@types/body-parser": "^1.19.5",
+    "axios": "^1.6.5",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
+    "mysql": "^2.18.1",
     "next": "14.0.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "sharp": "^0.33.2"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.6",
