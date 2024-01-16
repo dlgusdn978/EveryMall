@@ -2,13 +2,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Input from "../../components/input";
-import Checkbox from "../../components/checkbox";
+
 import { signUp } from "../api/user";
+import SignupCheckbox from "../../components/signup/signupCheckbox";
 const SignUp = () => {
-  const [allChecked, isAllChecked] = useState(false);
-  const setAllChecked = () => {
-    isAllChecked(!allChecked);
-  };
   return (
     <div className="w-9/12 m-auto">
       <div className="mt-44 mb-88 w-80 mx-auto">
@@ -26,24 +23,15 @@ const SignUp = () => {
           <div className="my-10"></div>
           <div className="flex flex-col">
             {/* <form method="POST" action="/signup"> */}
+            <div className="border-2 border-gray-300"></div>
+            {/* </form> */}
+            <SignupCheckbox />
             <button
               className="border-0 py-4  bg-yellow-500 text-white font-bold"
               onClick={signUp}
             >
               회원가입
             </button>
-            {/* </form> */}
-
-            <div className="my-5 w-11/12 m-auto flex justify-between text-gray-400">
-              {/*Link로 대체*/}
-              <Checkbox
-                checked={allChecked}
-                disabled={false}
-                onChange={setAllChecked}
-              >
-                모두 동의합니다.
-              </Checkbox>
-            </div>
           </div>
         </div>
       </div>
