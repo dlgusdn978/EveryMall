@@ -8,6 +8,7 @@ type CheckboxState = {
   emailInformChecked: boolean;
   smsInformChecked: boolean;
   allChecked: boolean;
+  essentialChecked: boolean;
 };
 const SignupCheckbox = () => {
   const [checkboxes, setCheckboxes] = useState({
@@ -18,10 +19,10 @@ const SignupCheckbox = () => {
     emailInformChecked: false,
     smsInformChecked: false,
     allChecked: false,
+    essentialChecked: false,
   });
 
   const handleCheckboxChange = (name: string) => {
-    console.log(name);
     if (name === "allChecked") {
       const newState = Object.fromEntries(
         Object.entries(checkboxes).map(([key, value]) => [
@@ -37,11 +38,18 @@ const SignupCheckbox = () => {
           ...prev,
           [name]: !prev[name as keyof CheckboxState],
         };
-        let flag = true;
+        let isAllChecked = true;
+        let isEssentialChecked = true;
         Object.entries(newCheckboxes).map(([key, value]) => {
-          key !== "allChecked" ? (flag = flag && value) : flag;
+          key !== "allChecked"
+            ? (isAllChecked = isAllChecked && value)
+            : isAllChecked;
+          key === ("finTransChecked" || "termOfUseChecked" || "ageChecked")
+            ? (isEssentialChecked = isEssentialChecked && value)
+            : isEssentialChecked;
         });
-        newCheckboxes.allChecked = flag;
+        newCheckboxes.allChecked = isAllChecked;
+        newCheckboxes.essentialChecked = isEssentialChecked;
         return newCheckboxes;
       });
     }
@@ -50,7 +58,6 @@ const SignupCheckbox = () => {
   return (
     <div>
       <div className="my-5 w-11/12 m-auto flex text-black-400 font-bold [&>*]:mr-5">
-        {/*Link로 대체*/}
         <Checkbox
           checked={checkboxes.allChecked}
           disabled={false}

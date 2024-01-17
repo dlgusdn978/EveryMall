@@ -1,9 +1,23 @@
 import API from "../api/index";
 
-export const signUp = async () => {
+type UserProps = {
+  userId: string;
+  userPwd: string;
+  userName: string;
+  userPhone: string;
+};
+export const signUp = async ({
+  userId,
+  userPwd,
+  userName,
+  userPhone,
+}: UserProps) => {
   console.log("signup");
   return API.post(`/api/signUp`, {
-    userId: "asdf",
+    userId,
+    userPwd,
+    userName,
+    userPhone,
   })
     .then((response) => console.log(response.data))
     .catch((response) => console.log(response));
