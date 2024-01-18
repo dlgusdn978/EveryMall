@@ -1,19 +1,37 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, ChangeEvent } from "react";
 import Link from "next/link";
 import Input from "../../components/input";
 const Page = () => {
   const [userId, setUserId] = useState("");
   const [userPwd, setUserPwd] = useState("");
+  const changeId = (event: ChangeEvent<HTMLInputElement>) => {
+    setUserId(event.target.value);
+  };
+  const changePwd = (event: ChangeEvent<HTMLInputElement>) => {
+    setUserPwd(event.target.value);
+  };
   return (
     <div className="w-9/12 m-auto">
-      <div className="mt-44 mb-88 w-1/3 mx-auto">
+      <div className="mt-24 mb-88 w-1/3 mx-auto">
         {/* 로그인 문구*/}
         <div className="text-4xl">로그인</div>
         {/* 아이디 비밀번호 입력란*/}
         <div className="mt-10">
-          {/* <Input placeholder="아이디" value={userId}></Input>
-          <Input placeholder="비밀번호" value={userPwd}></Input> */}
+          <Input
+            placeholder="아이디"
+            value={userId}
+            onChange={() => {
+              changeId;
+            }}
+          ></Input>
+          <Input
+            placeholder="비밀번호"
+            value={userPwd}
+            onChange={() => {
+              changePwd;
+            }}
+          ></Input>
           <div className="py-5 px-2 flex space-x-4 ">
             <input type="checkbox" value="아이디 저장" className="w-5" />
             <p className="text-gray-500">아이디 저장</p>

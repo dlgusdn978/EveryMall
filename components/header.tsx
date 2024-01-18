@@ -5,10 +5,12 @@ import Basket from "../public/img/icons8-basket-60.png";
 import ImageDiv from "../components/image";
 import Link from "next/link";
 import logo from "../public/img/logo.png";
+import Image from "next/image";
+import search from "../public/img/icons8-search-50.png";
 const Header = () => {
   //필요 : 검색, 마이페이지, 로그인, 장바구니, 로고, 고객센터.
   return (
-    <div className="w-9/12 m-auto h-24">
+    <div className="h-24">
       <div className="h-2/5 flex space-x-4 justify-end">
         <Link
           href="/login"
@@ -35,9 +37,11 @@ const Header = () => {
           {/* 검색 */}
           <input
             type="text"
-            className="border-4 border-yellow-500 rounded-md w-11/12 p-2 focus:outline-none"
+            className="border-4 border-yellow-500 rounded-md w-11/12 p-2 focus:outline-none pl-4"
           />
-          <button className="border-2">asdf</button>
+          <button className="relative right-10 top-2">
+            <Image src={search.src} width={30} height={30} alt="search"></Image>
+          </button>
         </div>
         <div className="flex space-x-4">
           <Link href="/mypage">

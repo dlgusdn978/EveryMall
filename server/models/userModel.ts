@@ -8,14 +8,14 @@ type UserProps = {
 };
 const User = {
   regist: async (req: UserProps) => {
-    console.log(req);
-    console.log(req.userId);
     return new Promise((resolve, reject) => {
       //   const query = `INSERT INTO User VALUES('${req.userId}')`;
       const query = `INSERT INTO User VALUES('${req.userId}','${req.userPwd}','${req.userName}','${req.userPhone}')`;
-      connection.query(query, (err: Error) => {
+      connection.query(query, (err: Error, res: Response) => {
         if (err) {
           reject(err);
+        } else {
+          resolve(res);
         }
       });
     });

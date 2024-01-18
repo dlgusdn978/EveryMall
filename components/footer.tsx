@@ -4,7 +4,7 @@ import logo from "../public/img/logo.png";
 import ImageDiv from "../components/image";
 const footer = () => {
   return (
-    <div className="w-9/12 m-auto mt-24 relative">
+    <div className="mt-24 relative">
       {/* 회사 소개, 이용약관, 개인정보처리방침, 혜택 등. */}
       <div className="p-3 border-y-2 border-gray-300 text-gray-500">
         <div className="flex [&>*]:mx-5">

@@ -18,7 +18,5 @@ export const signUp = async ({
     userPwd,
     userName,
     userPhone,
-  })
-    .then((response) => console.log(response.data))
-    .catch((response) => console.log(response));
+  });
 };

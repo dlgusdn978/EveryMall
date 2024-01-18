@@ -4,14 +4,17 @@ import Image, { StaticImageData } from "next/image";
 interface ImageProps {
   width: number;
   height: number;
-  src: String;
-  alt: String;
-  desc?: String;
+  src: string;
+  alt: string;
+  desc?: string;
+  objectFit?: string;
 }
 const ImageDiv = (props: ImageProps) => {
   return (
     <div
-      className={`hover flex flex-col justify-center items-center w-${props.width} h-${props.height}`}
+      className={`hover flex flex-col justify-center items-center object-${`${props.objectFit}`} w-${
+        props.width
+      } h-${props.height}`}
     >
       <Image
         width={`${props.width}`}

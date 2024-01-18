@@ -1,13 +1,8 @@
 "use client";
-import React, {
-  useState,
-  useEffect,
-  MutableRefObject,
-  ChangeEvent,
-} from "react";
+import React, { useState, ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Input from "../../components/input";
-
 import { signUp } from "../api/user";
 import SignupCheckbox from "../../components/signup/signupCheckbox";
 type UserProps = {
@@ -17,6 +12,7 @@ type UserProps = {
   userPhone: string;
 };
 const SignUp = () => {
+  const router = useRouter();
   const [userId, setUserId] = useState("");
   const [userPwd, setUserPwd] = useState("");
   const [userPwdCheck, setUserPwdCheck] = useState("");
@@ -56,11 +52,18 @@ const SignUp = () => {
     {
       /* todo : 연락처 정규표현식 넣기 */
     }
-    signUp({ userId, userPwd, userName, userPhone });
+    signUp({ userId, userPwd, userName, userPhone })
+      .then(() => {
+        console.log("asdfasfdsfa");
+        router.push("/login");
+      })
+      .catch(() => {
+        alert("입력 값 수정 필요");
+      });
   };
   return (
     <div className="w-9/12 m-auto">
-      <div className="mt-44 mb-88 w-1/3 mx-auto">
+      <div className="mt-24 mb-88 w-1/3 mx-auto">
         {/* 로그인 문구*/}
         <div className="text-4xl">회원가입</div>
         {/* 아이디 비밀번호 입력란*/}
