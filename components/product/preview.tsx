@@ -1,9 +1,17 @@
+"use client";
 import React from "react";
+import { useRouter } from "next/navigation";
 import ImageDiv from "../image";
 import hanger from "../../public/img/hanger.jpg";
 const Preview = () => {
+  const router = useRouter();
   return (
-    <div className="p-3 m-3 border-2">
+    <div
+      className="p-3 m-3 border-2"
+      onClick={() => {
+        router.push("/product");
+      }}
+    >
       <ImageDiv
         alt={"alt"}
         height={300}

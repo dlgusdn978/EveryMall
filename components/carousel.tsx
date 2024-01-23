@@ -31,7 +31,7 @@ const Carousel = () => {
           className="object-cover object-center h-96 overflow-hidden "
         ></Image>
         <div className="absolute w-56  top-16 right-48 z-10 bg-white rounded-sm shadow-2xl ">
-          <ul className="[&>*]:border-b-2  [&>*]:px-5 [&>*]:py-5 last:border-0 font-bold text-gray-500">
+          <ul className="[&>*]:border-b-2  [&>*]:px-5 [&>*]:py-5 last:border-0 font-bold text-gray-500 cursor-pointer">
             <li
               className={`${count == 0 ? "border-2 border-blue-500" : ""}`}
               onClick={() => {
