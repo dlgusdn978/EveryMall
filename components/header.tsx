@@ -9,6 +9,7 @@ import Image from "next/image";
 import search from "../public/img/icons8-search-50.png";
 const Header = () => {
   //필요 : 검색, 마이페이지, 로그인, 장바구니, 로고, 고객센터.
+
   return (
     <div className="h-24">
       <div className="h-2/5 flex space-x-4 justify-end">

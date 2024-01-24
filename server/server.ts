@@ -1,4 +1,18 @@
 // import express, { Request, Response } from "express";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import { Express } from "express";
+declare module "express" {
+  interface Request {
+    user?: SignUpProps;
+  }
+}
+interface SignUpProps {
+  userId: string;
+  userPwd: string;
+  userName: string;
+  userPhone: string;
+}
 const express = require("express");
 const { parse } = require("url");
 const next = require("next");
@@ -24,6 +38,10 @@ nextApp.prepare().then(() => {
 
   // app.use(express.static(path.join(__dirname, "./public")));
 
+  app.use(express.json());
+  app.use(cookieParser());
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
   app.use("/api", require("./routes/apiRouter"));
 
   app.get("*", (req: Request, res: Response) => {

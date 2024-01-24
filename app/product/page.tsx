@@ -6,10 +6,12 @@ import React, {
   MutableRefObject,
   UIEventHandler,
 } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import prdImg from "../../public/img/hanger.jpg";
 import descImg from "../../public/img/hangerDesc1.jpg";
 const Product = () => {
+  const router = useRouter();
   const [count, setCount] = useState(1);
   const [price, setPrice] = useState(125000);
   const [res, setRes] = useState(price * count);
@@ -183,7 +185,10 @@ const Product = () => {
             <button className="w-1/2 bg-gray-400 font-bold text-white text-xl">
               장바구니
             </button>
-            <button className="w-1/2 bg-orange-500 font-bold text-white text-xl">
+            <button
+              className="w-1/2 bg-orange-500 font-bold text-white text-xl"
+              onClick={() => router.push("/basket")}
+            >
               구매하기
             </button>
           </div>
@@ -193,7 +198,7 @@ const Product = () => {
       <div className="flex justify-center bg-white items-center font-bold mt-5 border-y-2 [&>*]:py-4 sticky top-0">
         <div
           className={`w-1/4 flex justify-center ${
-            child == 0 ? "bg-gray-500" : "bg-white"
+            child == 0 ? "bg-gray-300" : "bg-white"
           }`}
           onClick={() => moveTo("desc")}
         >
@@ -201,7 +206,7 @@ const Product = () => {
         </div>
         <div
           className={`w-1/4 flex justify-center ${
-            child == 1 ? "bg-gray-500" : "bg-white"
+            child == 1 ? "bg-gray-300" : "bg-white"
           }`}
           onClick={() => moveTo("review")}
         >
@@ -209,7 +214,7 @@ const Product = () => {
         </div>
         <div
           className={`w-1/4 flex justify-center ${
-            child == 2 ? "bg-gray-500" : "bg-white"
+            child == 2 ? "bg-gray-300" : "bg-white"
           }`}
           onClick={() => moveTo("qna")}
         >
@@ -217,7 +222,7 @@ const Product = () => {
         </div>
         <div
           className={`w-1/4 flex justify-center ${
-            child == 3 ? "bg-gray-500" : "bg-white"
+            child == 3 ? "bg-gray-300" : "bg-white"
           }`}
           onClick={() => moveTo("delivery")}
         >
