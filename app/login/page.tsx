@@ -4,19 +4,22 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Input from "../../components/input";
 import { login } from "../api/user";
-import { useAppSelector } from "../../lib/hooks";
+import { useAppSelector, useAppDispatch } from "../../lib/hooks";
+import { RootState } from "../../lib/store";
+import { setAccessToken } from "../../lib/features/auth/authSlice";
 type LoginProps = {
   userId: string;
   userPwd: string;
 };
 interface AuthState {
-  accessToken: string;
-  refreshToken: string;
+  access_token: string;
+  expiration_time: string;
 }
 const Page = () => {
   const router = useRouter();
-  const useSelector = useAppSelector((state: AuthState) => state.accessToken);
-  console.log(useSelector);
+  const auth = useAppSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
+
   const [userId, setUserId] = useState("");
   const [userPwd, setUserPwd] = useState("");
 
@@ -29,8 +32,14 @@ const Page = () => {
   const userLogin = ({ userId, userPwd }: LoginProps) => {
     login({ userId, userPwd })
       .then((response) => {
-        console.log("로그인 성공");
-        console.log(response.data);
+        dispatch(
+          setAccessToken({
+            access_token: response.data.access_token,
+            expiration_time: new Date(Date.now()).getTime() + 3600,
+          })
+        );
+        console.log(auth.access_token);
+        console.log(auth.expiration_time);
         router.push("/");
       })
       .catch((err) => console.log(err));

@@ -16,7 +16,6 @@ export const signUp = async ({
   userName,
   userPhone,
 }: SignUpProps) => {
-  console.log("signup");
   return API.post(`/api/signUp`, {
     userId,
     userPwd,

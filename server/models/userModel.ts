@@ -27,6 +27,7 @@ const User = {
   },
   login: async (req: LoginProps) => {
     return new Promise((resolve, reject) => {
+      console.log(req);
       const query = `SELECT * FROM User WHERE id='${req.userId}'`;
       connection.query(query, (err: Error, res: Response) => {
         if (err) {

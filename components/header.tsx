@@ -7,18 +7,31 @@ import Link from "next/link";
 import logo from "../public/img/logo.png";
 import Image from "next/image";
 import search from "../public/img/icons8-search-50.png";
+import { useAppSelector } from "../lib/hooks";
+import { RootState } from "../lib/store";
 const Header = () => {
   //필요 : 검색, 마이페이지, 로그인, 장바구니, 로고, 고객센터.
+  const auth = useAppSelector((state: RootState) => state.auth);
 
   return (
     <div className="h-24">
       <div className="h-2/5 flex space-x-4 justify-end">
-        <Link
-          href="/login"
-          className="flex items-center text-gray-500 font-normal"
-        >
-          로그인/회원가입
-        </Link>
+        {auth.access_token === "" ? (
+          <Link
+            href="/login"
+            className="flex items-center text-gray-500 font-normal"
+          >
+            로그인/회원가입
+          </Link>
+        ) : (
+          <Link
+            href="/mypage"
+            className="flex items-center text-gray-500 font-normal"
+          >
+            마이페이지
+            {auth.expiration_time.toString()}
+          </Link>
+        )}
         <div className="flex items-center text-gray-500 font-normal">
           고객센터
         </div>

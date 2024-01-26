@@ -1,8 +1,9 @@
-import React from "react";
-import Link from "next/link";
+"use client";
+import React, { useEffect } from "react";
 import "../public/css/globals.css";
 import Carousel from "../components/carousel";
 import Preview from "../components/product/preview";
+
 export default function Page() {
   return (
     <main className="max-w-min">

@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
+import { cookies } from "next/headers";
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
+
 // const asyncHandler = require("express-async-handler");
 require("dotenv").config();
 
@@ -26,15 +28,21 @@ const getLogin = asyncHandler(async (req: Request, res: Response) => {
     res.json({ status: 400, message: "Cannot found user" });
   }
 
-  const compareRes = await bcrypt.compare(body.userId, user[0].password);
+  const compareRes = await bcrypt.compare(body.userPwd, user[0].password);
   if (!compareRes) {
     console.log("비밀번호 다를 때");
     res.json({ status: 400, message: "Incorrect password error" });
   }
+  const access_token = jwt.sign({ id: body.userId }, jwtSecret);
+  const refresh_token = jwt.sign({ id: body.userId }, jwtSecret, {
+    expiresIn: "1d",
+  });
 
-  const token = jwt.sign({ id: user.id }, jwtSecret);
-  res.cookie("token", token, { httpOnly: true });
-  res.json({ status: 200, message: "login success" });
+  res.setHeader(
+    "Set-Cookie",
+    `refresh_token=${refresh_token}; HttpOnly; Path=/; Max-Age=86400; SameSite=Strict; Secure`
+  );
+  res.json({ status: 200, message: "login success", access_token });
 });
 const getSignUp = asyncHandler(async (req: Request, res: Response) => {
   const data: any = req.body;

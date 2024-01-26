@@ -29,8 +29,9 @@
     "jwt-token": "^1.0.9",
     "mysql": "^2.18.1",
     "next": "^14.1.0",
-    "react": "^18",
+    "react-cookie": "^7.0.1",
     "react-dom": "^18",
+    "react-redux": "^9.1.0",
     "sharp": "^0.33.2"
   },
   "devDependencies": {
@@ -47,6 +48,8 @@
     "mini-css-extract-plugin": "^2.7.7",
     "nodemon": "^3.0.2",
     "postcss": "^8",
+    "react": "^18.2.0",
+    "redux": "^5.0.1",
     "tailwindcss": "^3.3.0",
     "ts-node": "^10.9.2",
     "typescript": "^5"
