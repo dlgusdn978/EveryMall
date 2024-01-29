@@ -1,5 +1,4 @@
-import API from "../api/index";
-
+import CommonAPI from "../api/common";
 type SignUpProps = {
   userId: string;
   userPwd: string;
@@ -16,7 +15,7 @@ export const signUp = async ({
   userName,
   userPhone,
 }: SignUpProps) => {
-  return API.post(`/api/signUp`, {
+  return CommonAPI.post(`/api/signUp`, {
     userId,
     userPwd,
     userName,
@@ -25,8 +24,18 @@ export const signUp = async ({
 };
 
 export const login = async ({ userId, userPwd }: LoginProps) => {
-  return API.post(`/api/login`, {
+  return CommonAPI.post(`/api/login`, {
     userId,
     userPwd,
   });
+};
+
+export const reissue = async () => {
+  try {
+    const res = await CommonAPI.get("/api/reissue");
+    console.log(res);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
 };

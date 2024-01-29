@@ -5,13 +5,21 @@ import carousel1 from "../public/img/carousel1.jpg";
 import beauty from "../public/img/beauty.jpg";
 import coupon from "../public/img/coupon.jpg";
 import sales from "../public/img/sales.jpg";
+import { getCarouselImg } from "../app/api/product";
 type CarouselProps = {
   Image: StaticImageData;
   desc: string;
+  src: string;
 };
 const Carousel = () => {
   const carouselImg = [carousel1, beauty, coupon, sales];
+  // const [imgList, setImgList] = useState({});
   const [count, setCount] = useState(0);
+  // const setCarouselImg = (imgList: CarouselProps[]) => {
+  //   setImgList(imgList);
+  //   console.log(imgList);
+  //   console.log(imgList[0].src);
+  // };
   useEffect(() => {
     const timer = setInterval(() => {
       setCount((prev) => (prev + 1) % carouselImg.length);
@@ -20,8 +28,15 @@ const Carousel = () => {
       clearInterval(timer);
     };
   }, []);
+  // useEffect(() => {
+  //   getCarouselImg().then((response) => {
+  //     console.log(response.data.imgs);
+  //     console.log(typeof response.data.imgs);
+  //     setCarouselImg(response.data.imgs);
+  //   });
+  // }, []);
   return (
-    <div className="relative m-auto h-96 mt-5 flex">
+    <div className="relative m-auto h-96 flex">
       <div>
         <Image
           alt="carouselImg"

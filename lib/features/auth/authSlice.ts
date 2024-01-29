@@ -21,6 +21,7 @@ const authSlice = createSlice({
     },
     setInitState(state) {
       state.access_token = "";
+      state.expiration_time = new Date(Date.now()).getTime();
     },
   },
 });

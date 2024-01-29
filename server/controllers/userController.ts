@@ -19,6 +19,7 @@ interface SignUpProps {
 }
 const jwtSecret = process.env.JWT_SECRET;
 const jwt = require("jsonwebtoken");
+
 const getLogin = asyncHandler(async (req: Request, res: Response) => {
   const body: any = req.body;
   const user: any = await User.login(body);
@@ -57,5 +58,20 @@ const getSignUp = asyncHandler(async (req: Request, res: Response) => {
   const user = await User.regist(signUpInfo);
   return res.json();
 });
-
-module.exports = { getLogin, getSignUp };
+const reissue = asyncHandler(async (req: Request, res: Response) => {
+  const cookieStore = cookies();
+  const refresh_token = cookieStore.get("refresh_token");
+  const verified = jwt.verify(refresh_token, jwtSecret);
+  const checker = await User.login(verified.userId);
+  if (checker) {
+    const new_access_token = jwt.sign({ id: verified.userId }, jwtSecret);
+    res.json({
+      status: 200,
+      message: "reissue token success",
+      new_access_token,
+    });
+  } else {
+    res.json({ status: 401, messsage: "reissue token fail" });
+  }
+});
+module.exports = { getLogin, getSignUp, reissue };
