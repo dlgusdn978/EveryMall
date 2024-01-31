@@ -14,6 +14,30 @@ const Product = {
       });
     });
   },
+  getMainProduct: async () => {
+    return new Promise((resolve, reject) => {
+      const query = `SELECT * FROM Product WHERE id=${1}`;
+      connection.query(query, (err: Error, res: Response) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  },
+  getProduct: async (id: number) => {
+    return new Promise((resolve, reject) => {
+      const query = `SELECT * FROM Product WHERE id=${id}`;
+      connection.query(query, (err: Error, res: Response) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  },
 };
 
 module.exports = Product;

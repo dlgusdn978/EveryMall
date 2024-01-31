@@ -8,13 +8,25 @@ import React, {
 } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import prdImg from "../../public/img/hanger.jpg";
-import descImg from "../../public/img/hangerDesc1.jpg";
-const Product = () => {
+import prdImg from "../../../public/img/hanger.jpg";
+import descImg from "../../../public/img/hangerDesc1.jpg";
+import { getProduct } from "../../api/product";
+type ProductProps = {
+  id: number;
+  name: string;
+  link: string;
+  price: number;
+  inventory: number;
+  category: string;
+  sales_rate: number;
+  star_rate: number;
+};
+const Product = ({ params }: { params: { slug: number } }) => {
+  const [product, setProduct] = useState<ProductProps>();
   const router = useRouter();
   const [count, setCount] = useState(1);
-  const [price, setPrice] = useState(125000);
-  const [res, setRes] = useState(price * count);
+  const [price, setPrice] = useState(0);
+  const [res, setRes] = useState(0);
   const previewRef = useRef<HTMLDivElement>(null);
   const descRef = useRef<HTMLDivElement>(null);
   const reviewRef = useRef<HTMLDivElement>(null);
@@ -36,7 +48,14 @@ const Product = () => {
   const plus = () => {
     setCount(count + 1);
   };
-
+  useEffect(() => {
+    getProduct(params.slug).then((response) => {
+      setProduct(response.data.product[0]);
+      setPrice(response.data.product[0].price);
+      setRes(response.data.product[0].price * count);
+    });
+    product && setPrice(product.price);
+  }, []);
   useEffect(() => {
     setRes(count * price);
   }, [count]);
@@ -53,22 +72,20 @@ const Product = () => {
       const reviewHeight = reviewRef.current.scrollHeight;
       const qnaHeight = qnaRef.current.scrollHeight;
       if (dest === "desc") {
-        window.scrollTo(0, previewHeight + 140);
+        window.scrollTo(0, previewHeight + 230);
       } else if (dest === "review") {
-        window.scrollTo(0, previewHeight + descHeight + 140);
+        window.scrollTo(0, previewHeight + descHeight + 230);
       } else if (dest === "qna") {
-        window.scrollTo(0, previewHeight + descHeight + reviewHeight + 140);
+        window.scrollTo(0, previewHeight + descHeight + reviewHeight + 230);
       } else {
         window.scrollTo(
           0,
-          previewHeight + descHeight + reviewHeight + qnaHeight + 140
+          previewHeight + descHeight + reviewHeight + qnaHeight + 230
         );
       }
     }
   };
-  const scrollReview = (event: UIEventHandler) => {
-    console.log(event);
-  };
+
   const handleScroll = () => {
     if (
       previewRef.current &&
@@ -117,12 +134,16 @@ const Product = () => {
         </div>
         <div className="w-5/12">
           <div className="font-bold text-3xl">
-            이동식 스탠드 행거, 옷걸이 행거, 블랙
+            <span>{product?.name}</span>
           </div>
-          <div className="text-lg pb-2">별점?</div>
+          <div className="text-lg pb-2">
+            <span>{product?.star_rate}</span>
+          </div>
           <div className="mt-3 pb-2 ">
             <div className="text-2xl font-bold">
-              <span className="font-bold text-4xl">{setDivider(price)}</span>
+              <span className="font-bold text-4xl">
+                {product && setDivider(product?.price)}
+              </span>
               <span className="text-2xl">원</span>
             </div>
           </div>
@@ -152,7 +173,7 @@ const Product = () => {
           <div className="mt-2 pt-2">
             <div></div>
             <div className="w-full h-full border-2 py-4 px-4 bg-gray-100">
-              <div>이동식 스탠드 행거, 옷걸이 행거, 블랙</div>
+              <div>{product?.name}</div>
               <div className="mt-10 flex justify-between">
                 <div className="bg-white flex items-center">
                   <button
@@ -247,7 +268,51 @@ const Product = () => {
       </div>
       <div className="h-screen" ref={deliveryRef}>
         {" "}
-        배송/교환/반품안내
+        <h1 className="font-bold text-lg mb-3">배송정보</h1>
+        <table className="border-2">
+          <tbody className="[&>*]:flex [&>*]:justify-start text-sm font-normal">
+            <tr className="[&>*]:p-3 ">
+              <th className="flex items-start w-32 bg-gray-100 font-normal">
+                배송방법
+              </th>
+              <td className="w-1/2">순차배송</td>
+              <th className="flex items-start row-span-2 w-32 bg-gray-100 font-normal">
+                배송비
+              </th>
+              <td className=" row-span-2">
+                5,000원 - 도서 산간 지역 배송 불가
+              </td>
+            </tr>
+            <tr className="[&>*]:p-3">
+              <th className="flex items-start w-32 bg-gray-100 font-normal">
+                배송사
+              </th>
+              <td>롯데택배</td>
+            </tr>
+            <tr className="[&>*]:p-3">
+              <th className="flex items-start w-32 bg-gray-100 font-normal">
+                묶음배송 여부
+              </th>
+              <td>불가능</td>
+            </tr>
+            <tr className="[&>*]:p-3">
+              <th className="flex items-start w-32 bg-gray-100 font-normal">
+                배송기간
+              </th>
+              <td>
+                ㆍ도서산간 지역 등은 배송에 3-5일이 더 소요될 수 있습니다. -
+                천재지변, 물량 수급 변동 등 예외적인 사유 발생 시, 다소 지연될
+                수 있는 점 양해 부탁드립니다.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        {/* 배송방법 순차배송 
+        배송비 5,000원 - 도서산간 지역 배송불가 
+        배송사 롯데택배 
+        묶음배송 여부 불가능 배송기간 ㆍ도서산간 지역 등은 배송에
+        3-5일이 더 소요될 수 있습니다. - 천재지변, 물량 수급 변동 등 예외적인
+        사유 발생 시, 다소 지연될 수 있는 점 양해 부탁드립니다. */}
       </div>
     </div>
   );

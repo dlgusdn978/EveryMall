@@ -14,7 +14,7 @@ export const Product = () => {
     <div className="flex py-2 h-32 [&>*]:flex [&>*]:justify-center [&>*]:items-center">
       <div className="w-2/12">
         <input type="checkbox" className="w-4/12 h-6 bg-orange-500" />
-        <span className="w-8/12">아워홈</span>
+        <span className="w-8/12 items-center">아워홈</span>
       </div>
       <div className="w-6/12">사진, 상품 이름 들어갈 곳</div>
       <div className="w-1/12">{`${divider(productPrice)}`}</div>
@@ -24,7 +24,7 @@ export const Product = () => {
             <input
               type="button"
               value="-"
-              onClick={() => changeProductCount(1)}
+              onClick={() => changeProductCount(-1)}
             />
           </div>
           <span className="px-3">{`${productCount}`}</span>
@@ -32,7 +32,7 @@ export const Product = () => {
             <input
               type="button"
               value="+"
-              onClick={() => changeProductCount(-1)}
+              onClick={() => changeProductCount(1)}
             />
           </div>
         </div>
