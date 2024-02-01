@@ -11,6 +11,10 @@ import Image from "next/image";
 import prdImg from "../../../public/img/hanger.jpg";
 import descImg from "../../../public/img/hangerDesc1.jpg";
 import { getProduct } from "../../api/product";
+import { DeliveryNotice } from "../../../components/product/deliveryNotice";
+import { ExchangeLimitNotice } from "../../../components/product/exchangeLimitNotice";
+import { ExchangeNotice } from "../../../components/product/exchangeNotice";
+
 type ProductProps = {
   id: number;
   name: string;
@@ -123,7 +127,7 @@ const Product = ({ params }: { params: { slug: number } }) => {
   }, []);
 
   return (
-    <div className="min-w-max" ref={bodyRef}>
+    <div className="w-full" ref={bodyRef}>
       {/* 상품 간단정보 출력. */}
       <div
         className="mt-5 border-t-2 py-10 px-20 flex justify-around"
@@ -266,53 +270,11 @@ const Product = ({ params }: { params: { slug: number } }) => {
         {" "}
         상품문의
       </div>
-      <div className="h-screen" ref={deliveryRef}>
+      <div className="w-full [&>*]:mb-5" ref={deliveryRef}>
         {" "}
-        <h1 className="font-bold text-lg mb-3">배송정보</h1>
-        <table className="border-2">
-          <tbody className="[&>*]:flex [&>*]:justify-start text-sm font-normal">
-            <tr className="[&>*]:p-3 ">
-              <th className="flex items-start w-32 bg-gray-100 font-normal">
-                배송방법
-              </th>
-              <td className="w-1/2">순차배송</td>
-              <th className="flex items-start row-span-2 w-32 bg-gray-100 font-normal">
-                배송비
-              </th>
-              <td className=" row-span-2">
-                5,000원 - 도서 산간 지역 배송 불가
-              </td>
-            </tr>
-            <tr className="[&>*]:p-3">
-              <th className="flex items-start w-32 bg-gray-100 font-normal">
-                배송사
-              </th>
-              <td>롯데택배</td>
-            </tr>
-            <tr className="[&>*]:p-3">
-              <th className="flex items-start w-32 bg-gray-100 font-normal">
-                묶음배송 여부
-              </th>
-              <td>불가능</td>
-            </tr>
-            <tr className="[&>*]:p-3">
-              <th className="flex items-start w-32 bg-gray-100 font-normal">
-                배송기간
-              </th>
-              <td>
-                ㆍ도서산간 지역 등은 배송에 3-5일이 더 소요될 수 있습니다. -
-                천재지변, 물량 수급 변동 등 예외적인 사유 발생 시, 다소 지연될
-                수 있는 점 양해 부탁드립니다.
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        {/* 배송방법 순차배송 
-        배송비 5,000원 - 도서산간 지역 배송불가 
-        배송사 롯데택배 
-        묶음배송 여부 불가능 배송기간 ㆍ도서산간 지역 등은 배송에
-        3-5일이 더 소요될 수 있습니다. - 천재지변, 물량 수급 변동 등 예외적인
-        사유 발생 시, 다소 지연될 수 있는 점 양해 부탁드립니다. */}
+        <DeliveryNotice />
+        <ExchangeNotice />
+        <ExchangeLimitNotice />
       </div>
     </div>
   );
