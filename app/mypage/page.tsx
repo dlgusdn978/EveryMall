@@ -1,22 +1,40 @@
 import { GetServerSideProps } from "next";
 import React from "react";
 import Link from "next/link";
-import { Product } from "../../components/mypage/product";
+import { Product } from "../../components/basket/product";
 import divider from "../../lib/features/feature";
+import { OrderedProduct } from "../../components/mypage/product";
 interface MyPageProps {
   data: any;
 }
 
 export default function Home() {
   return (
-    <div>
-      <h1>주문 목록</h1>
-      <div className="border-2">
+    <div className="flex flex-row">
+      <div className="w-1/6 p-5 ">
         <div>
-          {/* <img></img> */}
-          <span>상품명</span>
-          <span>가격</span>
-          <button>배송완료</button>
+          <span className="font-bold text-xl text-orange-500">
+            나의 쇼핑 활동
+          </span>
+        </div>
+        <div className="pt-5">
+          <div>
+            <span>주문 내역 조회</span>
+          </div>
+          <div>
+            <span>최근 본 상품</span>
+          </div>
+          <div>
+            <span>내 리뷰</span>
+          </div>
+        </div>
+      </div>
+      <div className="p-5 w-full">
+        <div className="mb-5">
+          <span className="font-bold text-xl text-orange-500">주문목록</span>
+        </div>
+        <div className="">
+          <OrderedProduct></OrderedProduct>
         </div>
       </div>
     </div>

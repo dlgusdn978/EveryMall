@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Product } from "../../components/mypage/product";
+import { Product } from "../../components/basket/product";
 import divider from "../../lib/features/feature";
 const Basket = () => {
   const price = 10000;

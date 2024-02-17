@@ -1,56 +1,45 @@
-"use client";
-import React, { useState } from "react";
-import divider from "../../lib/features/feature";
-export const Product = () => {
-  const productProvider = "hanumall";
-  const productName = "가구";
-  const productPrice = 13000;
-  const [productCount, setProductCount] = useState(1);
-  const productTotalPrice = productPrice * productCount;
-  const changeProductCount = (num: number) => {
-    setProductCount(productCount + num);
-  };
+import React from "react";
+import Image from "next/image";
+import hanger from "../../public/img/hanger.jpg";
+export const OrderedProduct = () => {
+  // 날짜, 배송상태, 제품 사진, 제품명, 제품가격, 제품 개수, 배송 조회버튼, 교환신청, 리뷰 작성,
   return (
-    <div className="flex py-2 h-32 [&>*]:flex [&>*]:justify-center [&>*]:items-center">
-      <div className="w-2/12">
-        <input type="checkbox" className="w-4/12 h-6 bg-orange-500" />
-        <span className="w-8/12 items-center">아워홈</span>
-      </div>
-      <div className="w-6/12">사진, 상품 이름 들어갈 곳</div>
-      <div className="w-1/12">{`${divider(productPrice)}`}</div>
-      <div className="w-1/12">
-        <div className="flex border-y-2 font-bold text-sm">
-          <div className="border-x-2 px-1">
-            <input
-              type="button"
-              value="-"
-              onClick={() => changeProductCount(-1)}
-            />
+    <div className="border-2 rounded-md p-3">
+      <div className="font-bold py-2">2024-01-28 주문</div>
+      <div className="w-full border-2 rounded-md flex flex-row">
+        <div className="w-3/4 p-5">
+          <div className="h-1/4 py-2">
+            <span className="font-bold text-xl">배송완료</span>
+            <span className="font-bold text-xl text-green-500 ml-2">
+              1월27일 도착
+            </span>
           </div>
-          <span className="px-3">{`${productCount}`}</span>
-          <div className="border-x-2 px-1">
-            <input
-              type="button"
-              value="+"
-              onClick={() => changeProductCount(1)}
-            />
+          <div className="h-3/4 py-2 flex flex-row">
+            <div className="">
+              <Image
+                src={hanger}
+                alt={"asdf"}
+                width={"80"}
+                height={"80"}
+              ></Image>
+            </div>
+            <div className="py-2 px-5">
+              <div className="text-xl font-bold">1단 행거 검은색</div>
+              <div className="text-lg text-gray-500">10000원, 1개</div>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="w-1/12">{`${divider(productTotalPrice)}`}</div>
-      <div className="w-1/12">
-        <div className="flex-col">
-          <input
-            type="button"
-            value="바로구매"
-            className="py-1 px-2 border-orange-500 border-2 bg-orange-500 text-white "
-          />
-          <div className="h-2"></div>
-          <input
-            type="button"
-            value="삭제하기"
-            className=" py-1 px-2 border-gray-300 text-gray-400 border-2"
-          />
+        <div className="border-2"></div>
+        <div className="w-1/4 p-5 [&>*]:mt-2">
+          <button className="w-full py-2 border-2 rounded border-blue-500 text-blue-500">
+            배송조회
+          </button>
+          <button className="w-full py-2 border-2 rounded">
+            교환, 반품 신청
+          </button>
+          <button className="w-full py-2 border-2 rounded">
+            리뷰 작성하기
+          </button>
         </div>
       </div>
     </div>
