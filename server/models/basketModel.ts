@@ -4,15 +4,16 @@ const connection = require("../../config/dbConnect");
 type userInfoProps = {
   userId: string;
 };
-type addItemProps = {
+
+type ProductProps = {
   userId: string;
-  productId: string;
-  productCount: number;
+  productId: number;
+  count: number;
 };
 const Basket = {
-  getBasket: async (req: userInfoProps) => {
+  getBasketProduct: async (req: userInfoProps) => {
     return new Promise((resolve, reject) => {
-      const query = `SELECT * FROM BASKET WHERE id="${req.userId}"`;
+      const query = `SELECT b.uid, b.pid, b.count, p.name, p.link, p.price from Basket b left join Product p on b.pid=p.id WHERE uid='${req.userId}'`;
       connection.query(query, (err: Error, res: Response) => {
         if (err) {
           reject(err);
@@ -22,11 +23,44 @@ const Basket = {
       });
     });
   },
-  //   addBasketItem: async (req: addItemProps) => {
-  //     return new Promise((resolve, reject) => {
-  //       const query = `INSERT INTO PRODUCT VALUES()`;
-  //     });
-  //   },
+  addBasketProduct: async (req: ProductProps) => {
+    return new Promise((resolve, reject) => {
+      const query = `INSERT INTO BASKET(uid, pid, count) values ('${req.userId}',${req.productId},${req.count})`;
+      connection.query(query, (err: Error, res: Response) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  },
+  // 상품 수량 변경
+  updateBasketProduct: async (req: ProductProps) => {
+    return new Promise((resolve, reject) => {
+      const query = `UPDATE Basket set count = count+${req.count} where uid=${req.userId} and pid=${req.productId}`;
+      connection.query(query, (err: Error, res: Response) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  },
+  // 상품 삭제
+  deleteBasketProduct: async (req: ProductProps) => {
+    return new Promise((resolve, reject) => {
+      const query = `DELETE FROM Basket WHERE uid=${req.userId} and pid=${req.productId}`;
+      connection.query(query, (err: Error, res: Response) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  },
 };
 
 module.exports = Basket;

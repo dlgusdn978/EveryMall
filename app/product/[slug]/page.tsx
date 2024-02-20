@@ -14,7 +14,9 @@ import { getProduct } from "../../api/product";
 import { DeliveryNotice } from "../../../components/product/deliveryNotice";
 import { ExchangeLimitNotice } from "../../../components/product/exchangeLimitNotice";
 import { ExchangeNotice } from "../../../components/product/exchangeNotice";
-
+import { useSelector } from "react-redux";
+import { useAppSelector } from "../../../lib/hooks";
+import { RootState } from "../../../lib/store";
 type ProductProps = {
   id: number;
   name: string;
@@ -25,7 +27,13 @@ type ProductProps = {
   sales_rate: number;
   star_rate: number;
 };
+type BasketProps = {
+  user_id: string;
+  product_id: number;
+  count: number;
+};
 const Product = ({ params }: { params: { slug: number } }) => {
+  const user = useAppSelector((state: RootState) => state.user);
   const [product, setProduct] = useState<ProductProps>();
   const router = useRouter();
   const [count, setCount] = useState(1);
@@ -51,6 +59,9 @@ const Product = ({ params }: { params: { slug: number } }) => {
   };
   const plus = () => {
     setCount(count + 1);
+  };
+  const addBasketList = (userId: string, productId: number, count: number) => {
+    console.log(userId, productId, count);
   };
   useEffect(() => {
     getProduct(params.slug).then((response) => {
@@ -207,7 +218,12 @@ const Product = ({ params }: { params: { slug: number } }) => {
             </div>
           </div>
           <div className="w-full mt-5 *:py-5 *:px-10 *:border-2">
-            <button className="w-1/2 bg-gray-400 font-bold text-white text-xl">
+            <button
+              className="w-1/2 bg-gray-400 font-bold text-white text-xl"
+              onClick={() => {
+                addBasketList(user.user_id, params.slug, count);
+              }}
+            >
               장바구니
             </button>
             <button

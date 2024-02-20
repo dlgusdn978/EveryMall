@@ -36,6 +36,7 @@ const Page = () => {
         const expiration_time = new Date(Date.now()).getTime() + 3600;
         localStorage.setItem("access_token", response.data.access_token);
         localStorage.setItem("expiration_time", expiration_time.toString());
+        console.log(userId);
         dispatch(setUserInfo({ user_id: userId }));
         router.push("/");
       })

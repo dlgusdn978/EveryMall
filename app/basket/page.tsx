@@ -1,11 +1,20 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Product } from "../../components/basket/product";
 import divider from "../../lib/features/feature";
+import { getBasketProduct } from "../api/basket";
+import { useAppSelector } from "../../lib/hooks";
+import { RootState } from "../../lib/store";
 const Basket = () => {
+  const userId = useAppSelector((state: RootState) => state.user.user_id);
   const price = 10000;
   const deliveryPrice = 3000;
   const totalPrice = price + deliveryPrice;
+  // TODO : get basket list;
+  useEffect(() => {
+    userId &&
+      getBasketProduct(userId).then((response) => console.log(response.data));
+  }, [userId]);
   return (
     <div>
       <div className="p-5 font-bold text-xl">
