@@ -2,14 +2,14 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import ImageDiv from "../image";
-import hanger from "../../public/img/hanger.jpg";
 type PreviewProps = {
   id: number;
   name: string;
+  link: string;
   price: number;
   star_rate: number;
 };
-const Preview = ({ id, name, price, star_rate }: PreviewProps) => {
+const Preview = ({ id, name, link, price, star_rate }: PreviewProps) => {
   const router = useRouter();
   return (
     <div
@@ -18,12 +18,7 @@ const Preview = ({ id, name, price, star_rate }: PreviewProps) => {
         router.push(`/product/${id}`);
       }}
     >
-      <ImageDiv
-        alt={"alt"}
-        height={300}
-        width={300}
-        src={hanger.src}
-      ></ImageDiv>
+      <ImageDiv alt={"alt"} height={300} width={300} src={link}></ImageDiv>
       <div className="m-4 m-auto [&>*]:mt-3">
         <div className="font-bold text-gray-600">
           <span>{name}</span>

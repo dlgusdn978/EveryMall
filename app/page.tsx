@@ -25,23 +25,19 @@ export default function Page() {
     });
   }, []);
   return (
-    <main className="max-w-min">
+    <main className="w-full">
       <Carousel></Carousel>
-      <div className="min-w-max m-auto">
+      <div className="w-full">
         <span className="font-bold text-lg text-orange-500">
           {"오늘의 발견"}
         </span>
         <div className="border-2 grid grid-cols-4 flex flex-between p-3">
           {/* product area */}
           {/* id, name, price, star_rate */}
-          {mainProduct && (
-            <Preview
-              id={mainProduct[0].id}
-              name={mainProduct[0].name}
-              price={mainProduct[0].price}
-              star_rate={mainProduct[0].star_rate}
-            ></Preview>
-          )}
+          {mainProduct &&
+            mainProduct.map((item, index) => (
+              <Preview {...item} key={index}></Preview>
+            ))}
         </div>
       </div>
     </main>

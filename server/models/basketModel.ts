@@ -24,6 +24,7 @@ const Basket = {
     });
   },
   addBasketProduct: async (req: ProductProps) => {
+    console.log(req);
     return new Promise((resolve, reject) => {
       const query = `INSERT INTO BASKET(uid, pid, count) values ('${req.userId}',${req.productId},${req.count})`;
       connection.query(query, (err: Error, res: Response) => {

@@ -16,7 +16,7 @@ const Product = {
   },
   getMainProduct: async () => {
     return new Promise((resolve, reject) => {
-      const query = `SELECT * FROM Product WHERE id=${1}`;
+      const query = `SELECT * FROM Product LIMIT 4`;
       connection.query(query, (err: Error, res: Response) => {
         if (err) {
           reject(err);

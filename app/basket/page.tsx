@@ -1,20 +1,40 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Product } from "../../components/basket/product";
 import divider from "../../lib/features/feature";
 import { getBasketProduct } from "../api/basket";
 import { useAppSelector } from "../../lib/hooks";
 import { RootState } from "../../lib/store";
+type ProductProps = {
+  uid: string;
+  pid: number;
+  count: number;
+  name: string;
+  link: string;
+  price: number;
+};
 const Basket = () => {
   const userId = useAppSelector((state: RootState) => state.user.user_id);
-  const price = 10000;
+  const [totalPrice, setTotalPrice] = useState(0);
   const deliveryPrice = 3000;
-  const totalPrice = price + deliveryPrice;
   // TODO : get basket list;
+  const [basketList, setBasketList] = useState<ProductProps[]>([]);
   useEffect(() => {
     userId &&
-      getBasketProduct(userId).then((response) => console.log(response.data));
+      getBasketProduct(userId).then((response) => {
+        console.log(response.data.getProduct);
+        setBasketList(response.data.getProduct);
+        setTotalPrice(getTotalPrice(response.data.getProduct));
+      });
   }, [userId]);
+
+  const getTotalPrice = (props: ProductProps[]) => {
+    let price = 0;
+    props.map((item) => {
+      price += item.price * item.count;
+    });
+    return price;
+  };
   return (
     <div>
       <div className="p-5 font-bold text-xl">
@@ -42,12 +62,19 @@ const Basket = () => {
             <span>선택</span>
           </div>
         </div>
-        <Product></Product>
+
+        <div>
+          {basketList.map((item, index) => (
+            <Product {...item} key={index}></Product>
+          ))}
+        </div>
+
+        {/* <Product></Product> */}
         <div className="flex px-36 m-auto py-5 [&>*]:flex [&>*]:justify-center bg-gray-100">
           <div className="flex items-end w-1/3">
             <span className="text-sm">총 금액 </span>
             <span className="font-bold text-xl ml-3">
-              {`${divider(price)}`}원
+              {`${divider(totalPrice)}`}원
             </span>
           </div>
           +
@@ -61,7 +88,7 @@ const Basket = () => {
           <div className="flex items-end w-1/3">
             <span className="text-sm">결제 금액</span>
             <span className="font-bold text-xl  ml-3">
-              {`${divider(totalPrice)}`}원
+              {`${divider(totalPrice + deliveryPrice)}`}원
             </span>
           </div>
         </div>

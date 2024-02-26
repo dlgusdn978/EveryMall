@@ -17,6 +17,7 @@ import { ExchangeNotice } from "../../../components/product/exchangeNotice";
 import { useSelector } from "react-redux";
 import { useAppSelector } from "../../../lib/hooks";
 import { RootState } from "../../../lib/store";
+import { addBasketProduct } from "../../api/basket";
 type ProductProps = {
   id: number;
   name: string;
@@ -32,6 +33,7 @@ type BasketProps = {
   product_id: number;
   count: number;
 };
+// 결제 관련 데이터 조사
 const Product = ({ params }: { params: { slug: number } }) => {
   const user = useAppSelector((state: RootState) => state.user);
   const [product, setProduct] = useState<ProductProps>();
@@ -61,7 +63,13 @@ const Product = ({ params }: { params: { slug: number } }) => {
     setCount(count + 1);
   };
   const addBasketList = (userId: string, productId: number, count: number) => {
-    console.log(userId, productId, count);
+    addBasketProduct(userId, productId, count)
+      .then((response) => {
+        router.push(`/basket`);
+      })
+      .catch((response) => {
+        alert("구매 가능 수량이 부족합니다.");
+      });
   };
   useEffect(() => {
     getProduct(params.slug).then((response) => {
@@ -145,7 +153,14 @@ const Product = ({ params }: { params: { slug: number } }) => {
         ref={previewRef}
       >
         <div className="w-5/12">
-          <Image alt="desc" src={prdImg.src} width={500} height={500}></Image>
+          {product && (
+            <Image
+              alt="desc"
+              src={product?.link}
+              width={500}
+              height={500}
+            ></Image>
+          )}
         </div>
         <div className="w-5/12">
           <div className="font-bold text-3xl">

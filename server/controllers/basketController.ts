@@ -13,7 +13,7 @@ const getBasketProduct = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 const addBasketProduct = asyncHandler(async (req: Request, res: Response) => {
-  const addProduct = await Basket.addBasketProduct(req);
+  const addProduct = await Basket.addBasketProduct(req.body);
   res.json({
     status: 200,
     message: "add basket product successfully",

@@ -26,7 +26,7 @@ export default function RootLayout({
       <Provider store={storeRef.current}>
         <html lang="en">
           <body>
-            <div className="min-w-max">
+            <div className="w-full">
               <Header />
               {children}
               <Footer />
