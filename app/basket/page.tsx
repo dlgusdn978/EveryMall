@@ -5,6 +5,7 @@ import divider from "../../lib/features/feature";
 import { getBasketProduct } from "../api/basket";
 import { useAppSelector } from "../../lib/hooks";
 import { RootState } from "../../lib/store";
+import { useRouter } from "next/navigation";
 type ProductProps = {
   uid: string;
   pid: number;
@@ -15,6 +16,7 @@ type ProductProps = {
 };
 const Basket = () => {
   const userId = useAppSelector((state: RootState) => state.user.user_id);
+  const router = useRouter();
   const [totalPrice, setTotalPrice] = useState(0);
   const deliveryPrice = 3000;
   // TODO : get basket list;
@@ -105,6 +107,9 @@ const Basket = () => {
             type="button"
             value="전체상품 구매"
             className="py-4 px-7 border-2 border-orange-500 bg-orange-500 font-bold text-white text-xl"
+            onClick={() => {
+              router.push("/checkout");
+            }}
           />
         </div>
       </div>
