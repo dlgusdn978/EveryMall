@@ -6,6 +6,9 @@ import { RootState } from "../../lib/store";
 import Image from "next/image";
 import Head from "next/head";
 import DaumPostcode from "react-daum-postcode";
+import { useRouter } from "next/navigation";
+import { requestKakaoPayment } from "../api/payment";
+import dotenv from "dotenv";
 type ProductProps = {
   uid: string;
   pid: number;
@@ -14,13 +17,27 @@ type ProductProps = {
   link: string;
   price: number;
 };
+interface PaymentProps {
+  cid: string;
+  partner_order_id: string;
+  partner_user_id: string;
+  item_name: string;
+  quantity: number;
+  total_amount: number;
+  tax_free_amount: number;
+  approval_url: string;
+  cancel_url: string;
+  fail_url: string;
+}
 export default function Page() {
   const userId = useAppSelector((state: RootState) => state.user.user_id);
+  const router = useRouter();
   const [totalPrice, setTotalPrice] = useState(0);
   const [basketList, setBasketList] = useState<ProductProps[]>([]);
   const [zonecode, setZonecode] = useState(0);
   const [address, setAddress] = useState("");
   const [openPostcode, setOpenPostcode] = useState(false);
+  const kakao_secret_dev = process.env.NEXT_PUBLIC_KAKAO_SECRET_KEY_DEV;
   const handle = {
     clickButton: () => {
       setOpenPostcode((current) => !current);
@@ -29,6 +46,38 @@ export default function Page() {
       setOpenPostcode(false);
       setZonecode(data.zonecode);
       setAddress(data.address);
+    },
+    backToBasket: () => {
+      router.push("/basket");
+    },
+    getPaymentMethod: (method: string) => {
+      console.log(method);
+    },
+    processPayment: () => {
+      console.log("눌린 거 맞음?");
+      console.log(kakao_secret_dev);
+      kakao_secret_dev &&
+        requestKakaoPayment({
+          cid: kakao_secret_dev,
+          partner_order_id: Date.now().valueOf().toString(),
+          partner_user_id: userId,
+          item_name: basketList[0].name,
+          quantity: basketList.length,
+          total_amount: getTotalPrice(basketList),
+          tax_free_amount: 0,
+          approval_url: "http://localhost:3000",
+          cancel_url: "http://localhost:3000",
+          fail_url: "http://localhost:3000",
+        })
+          .then((response) => {
+            console.log("????");
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.log("실패?");
+            console.log(error);
+          });
+      console.log("눌린 거 맞음!");
     },
   };
   const getTotalPrice = (props: ProductProps[]) => {
@@ -164,53 +213,76 @@ export default function Page() {
             <col className="w-1/4 bg-gray-100"></col>
             <col className="w-3/4"></col>
           </colgroup>
-          <tbody className="[&>*]:border-b-2 [&>*]:border-slate-200">
+          <tbody className="[&>*]:border-b-2 [&>*]:border-slate-200 ">
             <tr>
               <th className="py-5">배송지 선택</th>
-              <td>기본 배송지</td>
+              <td className="pl-5">기본 배송지</td>
             </tr>
             <tr>
               <th className="py-5">받으시는 분</th>
-              <td>
-                <input type="text" placeholder="받으시는 분 성함" />
+              <td className="pl-5">
+                <input
+                  type="text"
+                  className="border-[1px] p-2 w-64"
+                  placeholder="받으시는 분 성함"
+                />
               </td>
             </tr>
             <tr>
               <th className="py-5">휴대폰</th>
-              <td>
+              <td className="pl-5">
                 <select>
                   <option>010</option>
                   <option>011</option>
                 </select>
-                <input type="text" placeholder="번호입력" />
-                <input type="text" placeholder="번호입력" />
+                <input
+                  type="text"
+                  className="border-[1px] p-2 w-64"
+                  placeholder="번호입력"
+                />
+                <input
+                  type="text"
+                  className="border-[1px] p-2 w-64"
+                  placeholder="번호입력"
+                />
               </td>
             </tr>
             <tr>
               <th className="py-5">주소</th>
-              <td>
-                <input type="text" placeholder="우편번호" value={zonecode} />
+              <td className="pl-5">
+                <input
+                  type="text"
+                  className="border-[1px] p-2 w-64"
+                  placeholder="우편번호"
+                  value={zonecode}
+                />
                 <input
                   type="button"
                   value="우편번호"
                   onClick={handle.clickButton}
+                  className="border-[1px] p-2 w-64"
                 />
 
                 <input
                   type="text"
                   placeholder="주소"
-                  className="w-full"
+                  className="w-full border-[1px] p-2 w-64"
                   value={address}
                 />
-                <input type="text" placeholder="상세주소" className="w-full" />
+                <input
+                  type="text"
+                  placeholder="상세주소"
+                  className="w-full border-[1px] p-2 w-64"
+                />
               </td>
             </tr>
             <tr>
               <th className="py-5">배송시 요청사항</th>
-              <td>
+              <td className="pl-5">
                 <input
                   type="text"
                   placeholder="50자 이내로 입력하세요. ex) 경비실에 맡겨주세요."
+                  className="border-[1px] p-2 w-full"
                 ></input>
               </td>
             </tr>
@@ -228,6 +300,7 @@ export default function Page() {
                   id="card"
                   name="payment"
                   value="card"
+                  // onClick={() => handle.getPaymentMethod("card")}
                 ></input>
                 <label htmlFor="card">신용카드</label>
               </span>
@@ -237,6 +310,7 @@ export default function Page() {
                   id="account"
                   name="payment"
                   value="account"
+                  onClick={() => handle.getPaymentMethod("account")}
                 ></input>
                 <label htmlFor="account">계좌이체</label>
               </span>
@@ -246,6 +320,7 @@ export default function Page() {
                   id="kakao"
                   name="payment"
                   value="kakao"
+                  onClick={() => handle.processPayment()}
                 ></input>
                 <label htmlFor="kakao">카카오페이</label>
               </span>
@@ -357,11 +432,13 @@ export default function Page() {
           type="button"
           value="결제하기"
           className="bg-orange-500 font-bold text-2xl text-white mr-5"
+          onClick={() => handle.processPayment()}
         ></input>
         <input
           type="button"
           value="장바구니로 가기"
           className="bg-gray-400 font-bold text-2xl text-white"
+          onClick={() => handle.backToBasket()}
         ></input>
       </div>
       {openPostcode && (

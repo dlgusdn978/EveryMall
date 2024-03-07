@@ -16,7 +16,8 @@ interface SignUpProps {
 const express = require("express");
 const { parse } = require("url");
 const next = require("next");
-
+const https = require("https");
+const fs = require("fs");
 const dotenv = require("dotenv");
 const path = require("path");
 
@@ -30,7 +31,12 @@ const nextApp = next({ dev, hostname, port });
 const handle = nextApp.getRequestHandler();
 const app = express();
 
-nextApp.prepare().then(() => {
+const httpOptions = {
+  key: fs.readFileSync(path.join(__dirname, "mykey.key")),
+  cert: fs.readFileSync(path.join(__dirname, "mycert.pem")),
+};
+
+nextApp.prepare().t() => {
   console.log("서버는 켜짐");
   // server.use("/api", apiRouter);
 

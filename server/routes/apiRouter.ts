@@ -17,6 +17,7 @@ const {
   updateBasketProduct,
   deleteBasketProduct,
 } = require("../controllers/basketController");
+const { requestKakaoPayment } = require("../controllers/paymentController");
 router.route("/login").post(getLogin);
 router.route("/signUp").post(getSignUp);
 router.route("/reissue").get(reissue);
@@ -29,4 +30,5 @@ router.route(`/basket/:userId`).get(getBasketProduct);
 router.route(`/basket/:userId/:productId`).delete(deleteBasketProduct);
 router.route("/basket").post(addBasketProduct).put(updateBasketProduct);
 
+router.route("/payment/kakao").post(requestKakaoPayment);
 module.exports = router;
