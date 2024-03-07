@@ -36,7 +36,7 @@ const httpOptions = {
   cert: fs.readFileSync(path.join(__dirname, "mycert.pem")),
 };
 
-nextApp.prepare().t() => {
+nextApp.prepare().then(() => {
   console.log("서버는 켜짐");
   // server.use("/api", apiRouter);
 
