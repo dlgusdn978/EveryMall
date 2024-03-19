@@ -31,10 +31,10 @@ const nextApp = next({ dev, hostname, port });
 const handle = nextApp.getRequestHandler();
 const app = express();
 
-const httpOptions = {
-  key: fs.readFileSync(path.join(__dirname, "mykey.key")),
-  cert: fs.readFileSync(path.join(__dirname, "mycert.pem")),
-};
+// const httpOptions = {
+//   key: fs.readFileSync(path.join(__dirname, "mykey.key")),
+//   cert: fs.readFileSync(path.join(__dirname, "mycert.pem")),
+// };
 
 nextApp.prepare().then(() => {
   console.log("서버는 켜짐");
