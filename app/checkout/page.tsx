@@ -9,6 +9,7 @@ import React, {
   SyntheticEvent,
   MutableRefObject,
 } from "react";
+import Modal from "react-modal";
 import { getBasketProduct } from "../api/basket";
 import { useAppSelector } from "../../lib/hooks";
 import { RootState } from "../../lib/store";
@@ -26,6 +27,7 @@ import KakaoPay from "../../public/img/kakaopay.png";
 import NaverPay from "../../public/img/naverpay.png";
 import Payco from "../../public/img/payco.png";
 import TossPay from "../../public/img/tosspay.png";
+import AddressInfo from "../../components/modal/addressInfo";
 type ProductProps = {
   uid: string;
   pid: number;
@@ -34,7 +36,12 @@ type ProductProps = {
   link: string;
   price: number;
 };
-
+type AddressProps = {
+  userName: string;
+  userPhone: string;
+  userZipcode: string;
+  userAddress: string;
+};
 type PaymentProps = {
   payMethod: string;
   source: string;
@@ -42,6 +49,7 @@ type PaymentProps = {
 const Page = () => {
   const userId = useAppSelector((state: RootState) => state.user.user_id);
   const router = useRouter();
+  const [modalState, setModalState] = useState(false);
   const paymentMethod = [
     { payMethod: "카드 결제", source: cardIcon.src },
     { payMethod: "네이버페이", source: NaverPay.src },
@@ -50,6 +58,32 @@ const Page = () => {
     { payMethod: "페이코", source: Payco.src },
   ];
 
+  const pseudoAddress = [
+    {
+      userName: "이현우",
+      userPhone: "010-1234-1234",
+      userZipcode: "01234",
+      userAddress: "서울시 강남구 테헤란로 123",
+    },
+    {
+      userName: "홍길동",
+      userPhone: "010-3333-1234",
+      userZipcode: "01234",
+      userAddress: "서울시 강남구 테헤란로 123",
+    },
+    {
+      userName: "김철수",
+      userPhone: "010-1234-1111",
+      userZipcode: "01234",
+      userAddress: "서울시 강남구 테헤란로 123",
+    },
+    {
+      userName: "짱구",
+      userPhone: "010-1277-3332",
+      userZipcode: "04531",
+      userAddress: "서울시 강남구 테헤란로 123",
+    },
+  ];
   const [selectedPayMethod, setSelectedPayMethod] = useState(-1);
   const handleClick = (method: number) => {
     setSelectedPayMethod(method);
@@ -105,8 +139,16 @@ const Page = () => {
     });
   }, [userId]);
 
+  useEffect(() => {
+    if (modalState) document.body.classList.add("overflow-hidden");
+    else document.body.classList.remove("oveflow-hidden");
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [modalState]);
   return (
-    <div className="w-full [&>*]:mt-5 relative">
+    <div className={`w-full [&>*]:mt-5 relative`}>
       <Head>
         <script
           src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
@@ -158,16 +200,11 @@ const Page = () => {
         </table>
       </div>
 
-      <SenderInfo
-        name={senderNameRef}
-        phone={senderPhoneRef}
-        email={senderEmailRef}
-      ></SenderInfo>
       <ReceiverInfo></ReceiverInfo>
       <div className="flex flex-row justify-between">
-        <div className="w-7/12">
+        <div className="w-7/12 min-w-[800px]">
           <h1 className="font-bold text-xl">결제 수단</h1>
-          <div className="grid grid-cols-3 gap-2 border-t-2 border-black pt-2">
+          <div className="grid grid-cols-3 gap-2 border-t-2 border-black pt-2 ">
             {paymentMethod.map((payment, index) => (
               <PaymentBox
                 item={payment}
@@ -286,6 +323,64 @@ const Page = () => {
           ></DaumPostcode>
         </div>
       )}
+      <button
+        onClick={() => {
+          setModalState(true);
+        }}
+      >
+        {"모달"}
+      </button>
+      <Modal
+        isOpen={modalState}
+        className="border-2"
+        // parentSelector={()=>{return document.querySelector('#root')}}
+        style={{
+          overlay: {
+            background: "rgba(34, 34, 34, 0.5)",
+            position: "fixed",
+            zIndex: 10,
+            top: 0,
+            left: 0,
+            bottom: 0,
+            overflow: "hidden",
+          },
+          content: {
+            background: "white",
+            width: "700px",
+            height: "800px",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+            zIndex: 5,
+            borderRadius: "15px",
+            padding: "5px",
+          },
+        }}
+      >
+        <button
+          onClick={() => {
+            setModalState(false);
+          }}
+          className="absolute top-6 right-10"
+        >
+          {"X"}
+        </button>
+        <div className="flex py-4 px-12 justify-center text-xl font-bold">
+          <h2>주소록</h2>
+        </div>
+        <div className="px-5 py-4">
+          {pseudoAddress.map((item, index) => (
+            <AddressInfo
+              userName={item.userName}
+              userPhone={item.userPhone}
+              userAddress={item.userAddress}
+              userZipcode={item.userZipcode}
+              key={index}
+            ></AddressInfo>
+          ))}
+        </div>
+      </Modal>
     </div>
   );
 };
