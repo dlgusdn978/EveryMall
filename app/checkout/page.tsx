@@ -1,14 +1,5 @@
 "use client";
-import React, {
-  ChangeEvent,
-  ChangeEventHandler,
-  EventHandler,
-  useEffect,
-  useState,
-  useRef,
-  SyntheticEvent,
-  MutableRefObject,
-} from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Modal from "react-modal";
 import { getBasketProduct } from "../api/basket";
 import { useAppSelector } from "../../lib/hooks";
@@ -17,9 +8,6 @@ import Image from "next/image";
 import Head from "next/head";
 import DaumPostcode from "react-daum-postcode";
 import { useRouter } from "next/navigation";
-import { requestKakaoPayment } from "../api/payment";
-import dotenv from "dotenv";
-import { SenderInfo } from "../../components/checkout/senderInfo";
 import { ReceiverInfo } from "../../components/checkout/receiverInfo";
 import PaymentBox from "../../components/product/paymentBox";
 import cardIcon from "../../public/img/icons8-card-50.png";
@@ -50,6 +38,9 @@ const Page = () => {
   const userId = useAppSelector((state: RootState) => state.user.user_id);
   const router = useRouter();
   const [modalState, setModalState] = useState(false);
+  const [allAgree, setAllAgree] = useState(false);
+  const [payAgree, setPayAgree] = useState(false);
+  const [termAgree, setTermAgree] = useState(false);
   const paymentMethod = [
     { payMethod: "카드 결제", source: cardIcon.src },
     { payMethod: "네이버페이", source: NaverPay.src },
@@ -58,40 +49,10 @@ const Page = () => {
     { payMethod: "페이코", source: Payco.src },
   ];
 
-  const pseudoAddress = [
-    {
-      userName: "이현우",
-      userPhone: "010-1234-1234",
-      userZipcode: "01234",
-      userAddress: "서울시 강남구 테헤란로 123",
-    },
-    {
-      userName: "홍길동",
-      userPhone: "010-3333-1234",
-      userZipcode: "01234",
-      userAddress: "서울시 강남구 테헤란로 123",
-    },
-    {
-      userName: "김철수",
-      userPhone: "010-1234-1111",
-      userZipcode: "01234",
-      userAddress: "서울시 강남구 테헤란로 123",
-    },
-    {
-      userName: "짱구",
-      userPhone: "010-1277-3332",
-      userZipcode: "04531",
-      userAddress: "서울시 강남구 테헤란로 123",
-    },
-  ];
   const [selectedPayMethod, setSelectedPayMethod] = useState(-1);
   const handleClick = (method: number) => {
     setSelectedPayMethod(method);
   };
-  // sender 관련 변수
-  const senderNameRef = useRef<HTMLInputElement>(null);
-  const senderPhoneRef = useRef<HTMLInputElement>(null);
-  const senderEmailRef = useRef<HTMLInputElement>(null);
 
   // receiver 관련 변수
 
@@ -118,11 +79,6 @@ const Page = () => {
     getPaymentMethod: (method: string) => {
       console.log(method);
     },
-    processPayment: () => {
-      console.log(senderNameRef.current);
-      console.log(senderPhoneRef.current);
-      console.log(senderEmailRef.current);
-    },
   };
   const getTotalPrice = (props: ProductProps[]) => {
     let price = 0;
@@ -138,15 +94,6 @@ const Page = () => {
       setTotalPrice(getTotalPrice(response.data.getProduct));
     });
   }, [userId]);
-
-  useEffect(() => {
-    if (modalState) document.body.classList.add("overflow-hidden");
-    else document.body.classList.remove("oveflow-hidden");
-
-    return () => {
-      document.body.classList.remove("overflow-hidden");
-    };
-  }, [modalState]);
   return (
     <div className={`w-full [&>*]:mt-5 relative`}>
       <Head>
@@ -235,14 +182,6 @@ const Page = () => {
                 <span>배송비</span>
                 <span>원</span>
               </li>
-              <li>
-                <span>배송비 할인</span>
-                <span>원</span>
-              </li>
-              <li>
-                <span>포장비</span>
-                <span>원</span>
-              </li>
             </ul>
             <div className="pt-5 flex justify-between">
               <strong className="font-bold text-xl">최종 결제금액</strong>
@@ -262,6 +201,11 @@ const Page = () => {
                 type="checkbox"
                 className="w-8 h-8 mr-2"
                 name="agreeAll"
+                checked={payAgree && termAgree}
+                onClick={() => {
+                  setPayAgree(!payAgree);
+                  setTermAgree(!termAgree);
+                }}
               ></input>
               <label htmlFor="agreeAll">
                 <strong>전체 동의</strong>
@@ -275,6 +219,10 @@ const Page = () => {
                   type="checkbox"
                   className="w-8 h-8 mr-2"
                   name="agree1"
+                  checked={payAgree}
+                  onClick={() => {
+                    setPayAgree(!payAgree);
+                  }}
                 ></input>
                 <label htmlFor="agree1" className="text-gray-500">
                   주문의 상품,가격,배송정보, 할인내역 등을 최종 확인하였으며,
@@ -288,6 +236,10 @@ const Page = () => {
                   type="checkbox"
                   className="w-8 h-8 mr-2"
                   name="agree2"
+                  checked={termAgree}
+                  onClick={() => {
+                    setTermAgree(!termAgree);
+                  }}
                 ></input>
                 <label htmlFor="agree2" className="text-gray-500">
                   개인정보 수집 동의 (필수)
@@ -302,7 +254,6 @@ const Page = () => {
           type="button"
           value="결제하기"
           className="bg-orange-500 font-bold text-2xl text-white mr-5"
-          onClick={() => handle.processPayment()}
         ></input>
         <input
           type="button"
@@ -323,64 +274,6 @@ const Page = () => {
           ></DaumPostcode>
         </div>
       )}
-      <button
-        onClick={() => {
-          setModalState(true);
-        }}
-      >
-        {"모달"}
-      </button>
-      <Modal
-        isOpen={modalState}
-        className="border-2"
-        // parentSelector={()=>{return document.querySelector('#root')}}
-        style={{
-          overlay: {
-            background: "rgba(34, 34, 34, 0.5)",
-            position: "fixed",
-            zIndex: 10,
-            top: 0,
-            left: 0,
-            bottom: 0,
-            overflow: "hidden",
-          },
-          content: {
-            background: "white",
-            width: "700px",
-            height: "800px",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%,-50%)",
-            zIndex: 5,
-            borderRadius: "15px",
-            padding: "5px",
-          },
-        }}
-      >
-        <button
-          onClick={() => {
-            setModalState(false);
-          }}
-          className="absolute top-6 right-10"
-        >
-          {"X"}
-        </button>
-        <div className="flex py-4 px-12 justify-center text-xl font-bold">
-          <h2>주소록</h2>
-        </div>
-        <div className="px-5 py-4">
-          {pseudoAddress.map((item, index) => (
-            <AddressInfo
-              userName={item.userName}
-              userPhone={item.userPhone}
-              userAddress={item.userAddress}
-              userZipcode={item.userZipcode}
-              key={index}
-            ></AddressInfo>
-          ))}
-        </div>
-      </Modal>
     </div>
   );
 };
