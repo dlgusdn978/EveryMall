@@ -9,6 +9,7 @@ export const ReceiverInfo = () => {
     "배송 주소": "서울시 광진구 뚝섬로 47길 26-3",
   });
   const [modalState, setModalState] = useState(false);
+  const [translate, setTranslate] = useState(false);
   const pseudoAddress = [
     {
       userName: "이현우",
@@ -80,7 +81,7 @@ export const ReceiverInfo = () => {
 
       <Modal
         isOpen={modalState}
-        className="border-2"
+        className="border-2 overflow-hidden"
         // parentSelector={()=>{return document.querySelector('#root')}}
         style={{
           overlay: {
@@ -117,19 +118,31 @@ export const ReceiverInfo = () => {
         <div className="flex py-4 px-12 justify-center text-xl font-bold">
           <h2>주소록</h2>
         </div>
-        <div className="px-5 py-4">
-          {pseudoAddress.map((item, index) => (
-            <AddressInfo
-              userName={item.userName}
-              userPhone={item.userPhone}
-              userAddress={item.userAddress}
-              userZipcode={item.userZipcode}
-              key={index}
-            ></AddressInfo>
-          ))}
+        <div
+          className={`flex transition delay-100 ${
+            translate ? "translate-x-[-100%]" : "translate-x-0"
+          }`}
+        >
+          <div className={`px-5 py-4 min-w-full`}>
+            {pseudoAddress.map((item, index) => (
+              <AddressInfo
+                userName={item.userName}
+                userPhone={item.userPhone}
+                userAddress={item.userAddress}
+                userZipcode={item.userZipcode}
+                key={index}
+              ></AddressInfo>
+            ))}
+          </div>
+          <div className="min-w-full px-5 py-4">asdfadsfsddsfsddsdsf</div>
         </div>
         <div className="flex absolute bottom-0 p-5 w-full">
-          <button className="w-full items-center border-2 py-5 rounded-lg">
+          <button
+            className="w-full items-center border-2 py-5 rounded-lg"
+            onClick={() => {
+              setTranslate(!translate);
+            }}
+          >
             <span>+</span>
             <span>주소록 추가</span>
           </button>

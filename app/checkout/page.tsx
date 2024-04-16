@@ -1,5 +1,6 @@
 "use client";
 import React, { ChangeEvent, useEffect, useState } from "react";
+import { useScript } from "usehooks-ts";
 import Modal from "react-modal";
 import { getBasketProduct } from "../api/basket";
 import { useAppSelector } from "../../lib/hooks";
@@ -79,6 +80,7 @@ const Page = () => {
     getPaymentMethod: (method: string) => {
       console.log(method);
     },
+    processPayment: () => {},
   };
   const getTotalPrice = (props: ProductProps[]) => {
     let price = 0;
@@ -94,11 +96,23 @@ const Page = () => {
       setTotalPrice(getTotalPrice(response.data.getProduct));
     });
   }, [userId]);
+
+  // 네이버 페이 관련 script
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://nsp.pay.naver.com/sdk/js/naverpay.min.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
   return (
     <div className={`w-full [&>*]:mt-5 relative`}>
       <Head>
         <script
           src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+          defer
+        ></script>
+        <script
+          src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"
           defer
         ></script>
       </Head>
@@ -149,9 +163,9 @@ const Page = () => {
 
       <ReceiverInfo></ReceiverInfo>
       <div className="flex flex-row justify-between">
-        <div className="w-7/12 min-w-[800px]">
+        <div className="w-7/12 min-w-[800px] ">
           <h1 className="font-bold text-xl">결제 수단</h1>
-          <div className="grid grid-cols-3 gap-2 border-t-2 border-black pt-2 ">
+          <div className="grid grid-cols-3 gap-2 border-t-2 border-black pt-2 p-5 ">
             {paymentMethod.map((payment, index) => (
               <PaymentBox
                 item={payment}
@@ -254,6 +268,9 @@ const Page = () => {
           type="button"
           value="결제하기"
           className="bg-orange-500 font-bold text-2xl text-white mr-5"
+          onClick={() => {
+            handle.processPayment();
+          }}
         ></input>
         <input
           type="button"

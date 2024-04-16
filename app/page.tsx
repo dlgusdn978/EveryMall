@@ -27,11 +27,11 @@ export default function Page() {
   return (
     <main className="w-full">
       <Carousel></Carousel>
-      <div className="w-full">
-        <span className="font-bold text-lg text-orange-500">
+      <div className="w-full pt-5">
+        <span className=" font-bold text-2xl  text-orange-500">
           {"오늘의 발견"}
         </span>
-        <div className="border-2 grid grid-cols-4 flex flex-between p-3">
+        <div className="grid grid-cols-4 flex flex-between p-3">
           {/* product area */}
           {/* id, name, price, star_rate */}
           {mainProduct &&

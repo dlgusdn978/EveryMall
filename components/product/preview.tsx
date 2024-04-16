@@ -17,7 +17,7 @@ const Preview = ({ id, name, link, price, star_rate }: PreviewProps) => {
   const router = useRouter();
   return (
     <div
-      className="p-3 m-3 border-2"
+      className="p-3 m-3 rounded-lg hover:shadow-xl hover:cursor-pointer"
       onClick={() => {
         router.push(`/product/${id}`);
       }}

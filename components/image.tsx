@@ -21,6 +21,7 @@ const ImageDiv = (props: ImageProps) => {
         height={`${props.height}`}
         src={`${props.src}`}
         alt={`${props.alt}`}
+        className="rounded-lg"
       ></Image>
       <div className="text-xs mt-1 color-gray-100 text-slate-400 font-bold">
         {props.desc}
