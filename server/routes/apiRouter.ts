@@ -30,5 +30,5 @@ router.route(`/basket/:userId`).get(getBasketProduct);
 router.route(`/basket/:userId/:productId`).delete(deleteBasketProduct);
 router.route("/basket").post(addBasketProduct).put(updateBasketProduct);
 
-router.route("/payment/kakao").post(requestKakaoPayment);
+router.route("/payment/kakao/ready").post(requestKakaoPayment);
 module.exports = router;

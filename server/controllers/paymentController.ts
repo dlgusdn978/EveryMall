@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
+import axios from "axios";
+
 const asyncHandler = require("express-async-handler");
 const Payment = require("../models/paymentModel");
+
 const requestKakaoPayment = asyncHandler(
   async (req: Request, res: Response) => {
     console.log("controller");

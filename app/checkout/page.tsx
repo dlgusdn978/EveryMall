@@ -17,6 +17,7 @@ import NaverPay from "../../public/img/naverpay.png";
 import Payco from "../../public/img/payco.png";
 import TossPay from "../../public/img/tosspay.png";
 import AddressInfo from "../../components/modal/addressInfo";
+import { requestKakaoPayment } from "../api/kakao";
 type ProductProps = {
   uid: string;
   pid: number;
@@ -31,10 +32,19 @@ type AddressProps = {
   userZipcode: string;
   userAddress: string;
 };
-type PaymentProps = {
-  payMethod: string;
-  source: string;
-};
+
+interface PaymentProps {
+  cid: string;
+  partner_order_id: string;
+  partner_user_id: string;
+  item_name: string;
+  quantity: number;
+  total_amount: number;
+  tax_free_amount: number;
+  approval_url: string;
+  cancel_url: string;
+  fail_url: string;
+}
 const Page = () => {
   const userId = useAppSelector((state: RootState) => state.user.user_id);
   const router = useRouter();
@@ -89,21 +99,28 @@ const Page = () => {
     });
     return price;
   };
-  useEffect(() => {
-    getBasketProduct(userId).then((response) => {
-      console.log(response.data.getProduct);
-      setBasketList(response.data.getProduct);
-      setTotalPrice(getTotalPrice(response.data.getProduct));
-    });
-  }, [userId]);
+  const requestKakaoReady = () => {
+    const productReceipt = {
+      cid: "TC0ONETIME",
+      partner_order_id: "1",
+      partner_user_id: "test1",
+      item_name: "아",
+      quantity: 1,
+      total_amount: 10000,
+      tax_free_amount: 0,
+      approval_url: "https://localhost:3000",
+      cancel_url: "https://localhost:3000",
+      fail_url: "https://localhost:3000",
+    };
+    requestKakaoPayment(productReceipt)
+      .then((response) => {
+        console.log("성공");
+      })
+      .catch((response) => {
+        console.log("실패");
+      });
+  };
 
-  // 네이버 페이 관련 script
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://nsp.pay.naver.com/sdk/js/naverpay.min.js";
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
   return (
     <div className={`w-full [&>*]:mt-5 relative`}>
       <Head>
@@ -111,13 +128,10 @@ const Page = () => {
           src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
           defer
         ></script>
-        <script
-          src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"
-          defer
-        ></script>
       </Head>
 
       <div className="">
+        <button onClick={() => requestKakaoReady()}>kakaopay</button>
         <h1 className="font-bold text-xl">주문 정보</h1>
         <table className="border-t-2 w-full">
           <colgroup>
@@ -216,7 +230,7 @@ const Page = () => {
                 className="w-8 h-8 mr-2"
                 name="agreeAll"
                 checked={payAgree && termAgree}
-                onClick={() => {
+                onChange={() => {
                   setPayAgree(!payAgree);
                   setTermAgree(!termAgree);
                 }}
@@ -234,7 +248,7 @@ const Page = () => {
                   className="w-8 h-8 mr-2"
                   name="agree1"
                   checked={payAgree}
-                  onClick={() => {
+                  onChange={() => {
                     setPayAgree(!payAgree);
                   }}
                 ></input>
@@ -251,7 +265,7 @@ const Page = () => {
                   className="w-8 h-8 mr-2"
                   name="agree2"
                   checked={termAgree}
-                  onClick={() => {
+                  onChange={() => {
                     setTermAgree(!termAgree);
                   }}
                 ></input>

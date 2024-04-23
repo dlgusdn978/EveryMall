@@ -31,10 +31,10 @@ const nextApp = next({ dev, hostname, port });
 const handle = nextApp.getRequestHandler();
 const app = express();
 
-// const httpOptions = {
-//   key: fs.readFileSync(path.join(__dirname, "mykey.key")),
-//   cert: fs.readFileSync(path.join(__dirname, "mycert.pem")),
-// };
+const httpOptions = {
+  key: fs.readFileSync(path.join("./", "localhost+2-key.pem")),
+  cert: fs.readFileSync(path.join("./", "localhost+2.pem")),
+};
 
 nextApp.prepare().then(() => {
   console.log("서버는 켜짐");
@@ -61,7 +61,7 @@ nextApp.prepare().then(() => {
     return handle(req, res);
   });
 
-  app.listen(process.env.PORT, () => {
+  https.createServer(httpOptions, app).listen(process.env.PORT, () => {
     console.log("ready");
   });
 });
