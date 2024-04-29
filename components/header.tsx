@@ -7,12 +7,19 @@ import Link from "next/link";
 import logo from "../public/img/logo.png";
 import Image from "next/image";
 import search from "../public/img/icons8-search-50.png";
-import { useAppSelector } from "../lib/hooks";
+import { useAppDispatch, useAppSelector } from "../lib/hooks";
 import { RootState } from "../lib/store";
+import { setAuthInitState } from "../lib/features/auth/authSlice";
+import { setUserInitState } from "../lib/features/user/userSlice";
 const Header = () => {
   //필요 : 검색, 마이페이지, 로그인, 장바구니, 로고, 고객센터.
   const auth = useAppSelector((state: RootState) => state.auth);
   const user = useAppSelector((state: RootState) => state.user);
+  const dispatch = useAppDispatch();
+  const requestLogout = () => {
+    dispatch(setUserInitState());
+    localStorage.removeItem("access_token");
+  };
   return (
     <div className="h-48">
       <div className="h-1/5 flex space-x-4 justify-end">
@@ -24,12 +31,12 @@ const Header = () => {
             로그인/회원가입
           </Link>
         ) : (
-          <Link
-            href="/mypage"
+          <button
             className="flex items-center text-gray-500 font-normal"
+            onClick={requestLogout}
           >
-            마이페이지
-          </Link>
+            로그아웃
+          </button>
         )}
         <div className="flex items-center text-gray-500 font-normal">
           고객센터
@@ -38,12 +45,12 @@ const Header = () => {
       <div className="h-2/5 mx-5 flex justify-between items-center">
         <div className="w-1/12 m-5">
           <Link href="/">
-            <ImageDiv
+            <Image
               width={logo.width}
               height={logo.height}
               src={logo.src}
               alt={"logo image"}
-            ></ImageDiv>
+            ></Image>
           </Link>
         </div>
         <div className="ml-5 w-8/12">
@@ -56,29 +63,31 @@ const Header = () => {
             <Image src={search.src} width={30} height={30} alt="search"></Image>
           </button>
         </div>
-        <div className="flex justify-between w-1/12">
-          <div>
-            <Link href="/mypage">
-              <ImageDiv
-                width={20}
-                height={24}
-                src={User.src}
-                alt="user"
-                desc="마이페이지"
-              />
-            </Link>
-          </div>
-          <div>
-            <Link href="/basket">
-              <ImageDiv
-                width={20}
-                height={24}
-                src={Basket.src}
-                alt="basket"
-                desc="장바구니"
-              />
-            </Link>
-          </div>
+        <div className="flex justify-between">
+          <Link
+            className="w-20 flex flex-col items-center cursor-pointer"
+            href="/mypage"
+          >
+            <Image
+              alt="마이페이지"
+              src={User.src}
+              width={28}
+              height={24}
+            ></Image>
+            <p className="text-gray-400 font-light text-sm">마이페이지</p>
+          </Link>
+          <Link
+            className="w-20 flex flex-col items-center cursor-pointer"
+            href="/basket"
+          >
+            <Image
+              alt="장바구니"
+              src={Basket.src}
+              width={28}
+              height={24}
+            ></Image>
+            <p className="text-gray-400 font-light text-sm">장바구니</p>
+          </Link>
         </div>
       </div>
       <div className="h-2/5 flex [&>*]:h-full">

@@ -19,12 +19,12 @@ const authSlice = createSlice({
       state.access_token = action.payload.access_token;
       state.expiration_time = action.payload.expiration_time;
     },
-    setInitState(state) {
+    setAuthInitState(state) {
       state.access_token = "";
       state.expiration_time = new Date(Date.now()).getTime();
     },
   },
 });
 
-export const { setAccessToken, setInitState } = authSlice.actions;
+export const { setAccessToken, setAuthInitState } = authSlice.actions;
 export default authSlice.reducer;

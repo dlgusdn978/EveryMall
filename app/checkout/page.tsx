@@ -90,7 +90,26 @@ const Page = () => {
     getPaymentMethod: (method: string) => {
       console.log(method);
     },
-    processPayment: () => {},
+    processPayment: () => {
+      switch (selectedPayMethod) {
+        case 0:
+          console.log("카드 결제");
+          break;
+        case 1:
+          console.log("네이버 페이");
+          break;
+        case 2:
+          console.log("카카오 페이");
+          requestKakaoReady();
+          break;
+        case 3:
+          console.log("토스 페이");
+          break;
+        case 4:
+          console.log("페이코");
+          break;
+      }
+    },
   };
   const getTotalPrice = (props: ProductProps[]) => {
     let price = 0;
@@ -121,6 +140,11 @@ const Page = () => {
       });
   };
 
+  useEffect(() => {
+    getBasketProduct(userId).then((response) => {
+      setBasketList(response.data.getProduct);
+    });
+  }, []);
   return (
     <div className={`w-full [&>*]:mt-5 relative`}>
       <Head>
@@ -131,7 +155,6 @@ const Page = () => {
       </Head>
 
       <div className="">
-        <button onClick={() => requestKakaoReady()}>kakaopay</button>
         <h1 className="font-bold text-xl">주문 정보</h1>
         <table className="border-t-2 w-full">
           <colgroup>
