@@ -5,6 +5,7 @@ const {
   getLogin,
   getSignUp,
   reissue,
+  verifyToken,
 } = require("../controllers/userController");
 const {
   getCarouselImg,
@@ -21,6 +22,7 @@ const { requestKakaoPayment } = require("../controllers/paymentController");
 router.route("/login").post(getLogin);
 router.route("/signUp").post(getSignUp);
 router.route("/reissue").get(reissue);
+router.route("/verifyToken").post(verifyToken);
 
 router.route("/carousel").get(getCarouselImg);
 router.route("/main").get(getMainProduct);
@@ -31,4 +33,5 @@ router.route(`/basket/:userId/:productId`).delete(deleteBasketProduct);
 router.route("/basket").post(addBasketProduct).put(updateBasketProduct);
 
 router.route("/payment/kakao/ready").post(requestKakaoPayment);
+
 module.exports = router;

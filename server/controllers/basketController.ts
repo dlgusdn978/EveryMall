@@ -3,8 +3,6 @@ const asyncHandler = require("express-async-handler");
 const Basket = require("../models/basketModel");
 
 const getBasketProduct = asyncHandler(async (req: Request, res: Response) => {
-  console.log(req.body);
-  console.log(req);
   const getProduct = await Basket.getBasketProduct(req.params);
   res.json({
     status: 200,

@@ -24,7 +24,6 @@ const Basket = () => {
   useEffect(() => {
     userId &&
       getBasketProduct(userId).then((response) => {
-        console.log(response.data.getProduct);
         setBasketList(response.data.getProduct);
         setTotalPrice(getTotalPrice(response.data.getProduct));
       });

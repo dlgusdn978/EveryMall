@@ -1,5 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { cookies } from "next/headers";
+import { parse } from "cookie";
+
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
@@ -19,7 +21,26 @@ interface SignUpProps {
 }
 const jwtSecret = process.env.JWT_SECRET;
 const jwt = require("jsonwebtoken");
+export const verifyAccessToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const authorizationHeader = req.headers["authorization"];
+  if (!authorizationHeader) {
+    return res.status(401).json({ message: "Authorization header missing" });
+  }
 
+  const token = authorizationHeader.split(" ")[1]; // Bearer {token} 구조로 되어 있으므로 분리
+
+  try {
+    const decoded = jwt.verify(token, jwtSecret);
+    req.user = decoded; // 유저 정보 저장 (예: userId)
+    next(); // 다음 미들웨어로 진행
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+};
 const getLogin = asyncHandler(async (req: Request, res: Response) => {
   const body: any = req.body;
   const user: any = await User.login(body);
@@ -59,19 +80,31 @@ const getSignUp = asyncHandler(async (req: Request, res: Response) => {
   return res.json();
 });
 const reissue = asyncHandler(async (req: Request, res: Response) => {
-  const cookieStore = cookies();
-  const refresh_token = cookieStore.get("refresh_token");
-  const verified = jwt.verify(refresh_token, jwtSecret);
-  const checker = await User.login(verified.userId);
-  if (checker) {
-    const new_access_token = jwt.sign({ id: verified.userId }, jwtSecret);
-    res.json({
-      status: 200,
-      message: "reissue token success",
-      new_access_token,
-    });
-  } else {
-    res.json({ status: 401, messsage: "reissue token fail" });
+  const cookies = parse(req.headers.cookie || ""); // 쿠키 파싱
+  const refresh_token = cookies["refresh_token"]; // refresh_token 가져오기
+
+  if (!refresh_token) {
+    return res
+      .status(401)
+      .json({ status: 401, message: "No refresh token found" });
+  }
+
+  try {
+    const verified = jwt.verify(refresh_token, jwtSecret);
+    const checker = await User.login(verified.userId);
+
+    if (checker) {
+      const new_access_token = jwt.sign({ id: verified.userId }, jwtSecret);
+      res.json({
+        status: 200,
+        message: "reissue token success",
+        new_access_token,
+      });
+    } else {
+      res.status(401).json({ status: 401, message: "reissue token fail" });
+    }
+  } catch (error) {
+    res.status(401).json({ status: 401, message: "Invalid refresh token" });
   }
 });
-module.exports = { getLogin, getSignUp, reissue };
+module.exports = { getLogin, getSignUp, reissue, verifyAccessToken };

@@ -1,7 +1,7 @@
 import CommonAPI from "./common";
-
+import API from "../api/index";
 export const getBasketProduct = async (userId: string) => {
-  return CommonAPI.get(`/api/basket/${userId}`);
+  return API.get(`/api/basket/${userId}`);
 };
 export const addBasketProduct = async (
   userId: string,
