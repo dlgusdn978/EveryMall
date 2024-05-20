@@ -23,6 +23,7 @@ const Payment = {
       .post("/online/v1/payment/ready", req.body)
       .then((response) => console.log(response))
       .catch((error) => console.log(error));
+    return result;
   },
 };
 

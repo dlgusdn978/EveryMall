@@ -38,11 +38,6 @@ const httpOptions = {
 
 nextApp.prepare().then(() => {
   console.log("서버는 켜짐");
-  // server.use("/api", apiRouter);
-
-  // app.set("port", port);
-
-  // app.use(express.static(path.join(__dirname, "./public")));
 
   app.use(express.json());
   app.use(cookieParser());

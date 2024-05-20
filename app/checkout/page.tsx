@@ -128,12 +128,13 @@ const Page = () => {
       total_amount: 10000,
       tax_free_amount: 0,
       approval_url: "https://localhost:3000",
-      cancel_url: "https://localhost:3000",
-      fail_url: "https://localhost:3000",
+      cancel_url: "https://localhost:3000/checkout",
+      fail_url: "https://localhost:3000/checkout",
     };
     requestKakaoPayment(productReceipt)
       .then((response) => {
-        console.log("성공");
+        console.log(response.data.data.next_redirect_pc_url);
+        location.href = response.data.data.next_redirect_pc_url;
       })
       .catch((response) => {
         console.log("실패");

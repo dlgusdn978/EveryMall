@@ -21,26 +21,24 @@ interface SignUpProps {
 }
 const jwtSecret = process.env.JWT_SECRET;
 const jwt = require("jsonwebtoken");
-export const verifyAccessToken = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const authorizationHeader = req.headers["authorization"];
-  if (!authorizationHeader) {
-    return res.status(401).json({ message: "Authorization header missing" });
-  }
+const verifyAccessToken = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const authorizationHeader = req.headers["authorization"];
+    if (!authorizationHeader) {
+      return res.status(401).json({ message: "Authorization header missing" });
+    }
 
-  const token = authorizationHeader.split(" ")[1]; // Bearer {token} 구조로 되어 있으므로 분리
+    const token = authorizationHeader.split(" ")[1]; // Bearer {token} 구조로 되어 있으므로 분리
 
-  try {
-    const decoded = jwt.verify(token, jwtSecret);
-    req.user = decoded; // 유저 정보 저장 (예: userId)
-    next(); // 다음 미들웨어로 진행
-  } catch (error) {
-    return res.status(401).json({ message: "Invalid or expired token" });
+    try {
+      const decoded = jwt.verify(token, jwtSecret);
+      req.user = decoded; // 유저 정보 저장 (예: userId)
+      next(); // 다음 미들웨어로 진행
+    } catch (error) {
+      return res.status(401).json({ message: "Invalid or expired token" });
+    }
   }
-};
+);
 const getLogin = asyncHandler(async (req: Request, res: Response) => {
   const body: any = req.body;
   const user: any = await User.login(body);

@@ -5,7 +5,7 @@ const {
   getLogin,
   getSignUp,
   reissue,
-  verifyToken,
+  verifyAccessToken,
 } = require("../controllers/userController");
 const {
   getCarouselImg,
@@ -22,7 +22,7 @@ const { requestKakaoPayment } = require("../controllers/paymentController");
 router.route("/login").post(getLogin);
 router.route("/signUp").post(getSignUp);
 router.route("/reissue").get(reissue);
-router.route("/verifyToken").post(verifyToken);
+router.route("/verifyToken").post(verifyAccessToken);
 
 router.route("/carousel").get(getCarouselImg);
 router.route("/main").get(getMainProduct);
