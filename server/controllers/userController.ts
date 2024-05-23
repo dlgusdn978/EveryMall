@@ -105,4 +105,25 @@ const reissue = asyncHandler(async (req: Request, res: Response) => {
     res.status(401).json({ status: 401, message: "Invalid refresh token" });
   }
 });
-module.exports = { getLogin, getSignUp, reissue, verifyAccessToken };
+const getAllAddress = asyncHandler(async (req: Request, res: Response) => {
+  const userAddress = await getAllAddress(req.params.userId);
+  res.json({
+    status: 200,
+    userAddress,
+  });
+});
+
+const addAddress = asyncHandler(async (req: Request, res: Response) => {
+  const addAddressRes = await addAddress(req.body);
+  res.json({
+    status: 200,
+  });
+});
+module.exports = {
+  getLogin,
+  getSignUp,
+  reissue,
+  verifyAccessToken,
+  getAllAddress,
+  addAddress,
+};

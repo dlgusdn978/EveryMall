@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import AddressInfo from "../modal/addressInfo";
 import Modal from "react-modal";
+import DaumPostcode from "react-daum-postcode";
+import Input from "../input";
+import AddAddressModal from "./addAddressModal";
 export const ReceiverInfo = () => {
   const [zonecode, setZonecode] = useState("");
   const [address, setAddress] = useState({
@@ -10,6 +13,10 @@ export const ReceiverInfo = () => {
   });
   const [modalState, setModalState] = useState(false);
   const [translate, setTranslate] = useState(false);
+  const [userName, setUserName] = useState("");
+  const changeName = (event: ChangeEvent<HTMLInputElement>) => {
+    setUserName(event.target.value);
+  };
   const pseudoAddress = [
     {
       userName: "이현우",
@@ -36,7 +43,10 @@ export const ReceiverInfo = () => {
       userAddress: "서울시 강남구 테헤란로 123",
     },
   ];
-
+  const selectAddress = (data: any) => {
+    setZonecode(data.zonecode);
+    setAddress(data.address);
+  };
   useEffect(() => {
     if (modalState) document.body.classList.add("overflow-hidden");
     else document.body.classList.remove("oveflow-hidden");
@@ -134,7 +144,16 @@ export const ReceiverInfo = () => {
               ></AddressInfo>
             ))}
           </div>
-          <div className="min-w-full px-5 py-4">asdfadsfsddsfsddsdsf</div>
+          <div className="min-w-full px-5 py-4">
+            <AddAddressModal></AddAddressModal>
+            {/* <div className="absolute top-1/3 left-1/3 z-20 w-1/3">
+              <DaumPostcode
+                onComplete={selectAddress}
+                autoClose={false}
+                defaultQuery={"판교역로 235"}
+              ></DaumPostcode>
+            </div> */}
+          </div>
         </div>
         <div className="flex absolute bottom-0 p-5 w-full">
           <button

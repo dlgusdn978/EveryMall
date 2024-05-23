@@ -79,11 +79,7 @@ const Page = () => {
     clickButton: () => {
       setOpenPostcode((current) => !current);
     },
-    // selectAddress: (data: any) => {
-    //   setOpenPostcode(false);
-    //   setZonecode(data.zonecode);
-    //   setAddress(data.address);
-    // },
+
     backToBasket: () => {
       router.push("/basket");
     },

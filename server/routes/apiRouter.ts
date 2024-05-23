@@ -6,6 +6,8 @@ const {
   getSignUp,
   reissue,
   verifyAccessToken,
+  addAddress,
+  getAllAddress,
 } = require("../controllers/userController");
 const {
   getCarouselImg,
@@ -23,6 +25,8 @@ router.route("/login").post(getLogin);
 router.route("/signUp").post(getSignUp);
 router.route("/reissue").get(reissue);
 router.route("/verifyToken").post(verifyAccessToken);
+router.route("/getAllAddress").get(getAllAddress);
+router.route("/addAddress").post(addAddress);
 
 router.route("/carousel").get(getCarouselImg);
 router.route("/main").get(getMainProduct);

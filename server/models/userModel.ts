@@ -10,6 +10,15 @@ type LoginProps = {
   userId: string;
   userPwd: string;
 };
+type AddressProps = {
+  userId: string;
+  userName: string;
+  userPhone: string;
+  userZoneCode: string;
+  userAddress: string;
+  userAddressDetail: string;
+  userRequest: string;
+};
 const User = {
   regist: async (req: SignUpProps) => {
     return new Promise((resolve, reject) => {
@@ -35,6 +44,29 @@ const User = {
         } else {
           resolve(res);
         }
+      });
+    });
+  },
+  getAllAddress: async (userId: string) => {
+    return new Promise((resolve, reject) => {
+      const query = `SELECT * FROM User_Address WHERE id=${userId}`;
+      connection.query(query, (err: Error, res: Response) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  },
+  addAddress: async (req: AddressProps) => {
+    return new Promise((resolve, reject) => {
+      const query = `INSERT INTO User_Address(uid, name, phone, zonecode, address, address_detail, request) VALUES('${req.userId}','${req.userName}', '${req.userPhone}', '${req.userZoneCode}', '${req.userAddress}', '${req.userAddressDetail}')`;
+      connection.query(query, (err: Error, res: Response) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(res);
       });
     });
   },

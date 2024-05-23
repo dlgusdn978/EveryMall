@@ -49,13 +49,9 @@ const Page = () => {
         <div className="text-4xl">로그인</div>
         {/* 아이디 비밀번호 입력란*/}
         <div className="mt-10">
+          <Input title={"아이디"} value={userId} onChange={changeId}></Input>
           <Input
-            placeholder="아이디"
-            value={userId}
-            onChange={changeId}
-          ></Input>
-          <Input
-            placeholder="비밀번호"
+            title={"비밀번호"}
             value={userPwd}
             onChange={changePwd}
           ></Input>
