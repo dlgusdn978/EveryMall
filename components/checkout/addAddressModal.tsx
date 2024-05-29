@@ -1,33 +1,53 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import Input from "../input";
-import DaumPostCode from "react-daum-postcode";
-type AddressProps = {
+import { addAddress } from "../../app/api/user";
+import { RootState } from "../../lib/store";
+import DaumPostcodeEmbed, { useDaumPostcodePopup } from "react-daum-postcode";
+import { useAppSelector } from "../../lib/hooks";
+import { postcodeScriptUrl } from "react-daum-postcode/lib/loadPostcode";
+
+type UserAddressProps = {
+  userId: string;
   userName: string;
   userPhone: string;
   userZoneCode: string;
   userAddress: string;
   userAddressDetail: string;
+  userRequest: string;
 };
-const AddAddressModal = () => {
-  const [userName, setUserName] = useState("");
-  const [userInfo, setUserInfo] = useState<AddressProps>({
+type ModalProps = {
+  closeModal: () => void;
+};
+const AddAddressModal = ({ closeModal }: ModalProps) => {
+  const user = useAppSelector((state: RootState) => state.user);
+
+  const [userName, setUserName] = useState(postcodeScriptUrl);
+  const [userInfo, setUserInfo] = useState<UserAddressProps>({
+    userId: user.user_id,
     userName: "",
     userPhone: "",
     userZoneCode: "",
     userAddress: "",
     userAddressDetail: "",
+    userRequest: "",
   });
-  const [openPostcode, setOpenPostcode] = useState(false);
+  const open = useDaumPostcodePopup();
+
+  const openAddressWindow = () => {
+    open({ onComplete: selectAddress });
+  };
   const selectAddress = (data: any) => {
-    console.log("????asdf");
-    setOpenPostcode(false);
     setUserInfo((prev) => ({
       ...prev,
       ["userZoneCode"]: data.zonecode,
       ["userAddress"]: data.address,
     }));
-    console.log(data);
+  };
+
+  const addUserAddress = () => {
+    closeModal();
     console.log(userInfo);
+    addAddress(userInfo);
   };
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -53,7 +73,13 @@ const AddAddressModal = () => {
           value={userInfo.userPhone}
           onChange={handleChange}
         ></Input>
-        <div className="relative">
+        <div className="flex flex-row-reverse">
+          <button
+            className="p-2 px-4 my-10 w-32 cursor-pointer rounded-lg bg-orange-400 text-white"
+            onClick={openAddressWindow}
+          >
+            {"주소 찾기"}
+          </button>
           <Input
             title={"우편번호"}
             placeholder={"우편번호를 검색하세요"}
@@ -61,13 +87,8 @@ const AddAddressModal = () => {
             value={userInfo.userZoneCode}
             onChange={handleChange}
             readonly={true}
+            width={"full"}
           ></Input>
-          <button
-            className="absolute right-0 top-1/2 z-20 cursor-pointer "
-            onClick={() => setOpenPostcode(!openPostcode)}
-          >
-            {"주소 찾기"}
-          </button>
         </div>
 
         <Input
@@ -85,31 +106,13 @@ const AddAddressModal = () => {
           value={userInfo.userAddressDetail}
           onChange={handleChange}
         ></Input>
+        <button
+          className="w-full border-2 py-3 rounded-lg bg-orange-500 text-white font-bold text-lg"
+          onClick={addUserAddress}
+        >
+          {"확인"}
+        </button>
       </div>
-      <button
-        onClick={() => {
-          setOpenPostcode(!openPostcode);
-        }}
-      >
-        닫기
-      </button>
-      {/* <div className="absolute top-1/3 left-1/3 z-20 w-1/3"> */}
-      <div
-        className={`absolute w-full h-full z-20 ${
-          openPostcode ? "block" : "hidden"
-        }`}
-      >
-        <DaumPostCode
-          style={{
-            height: "400px",
-            width: "100%",
-          }}
-          onComplete={(data: any) => selectAddress(data)}
-          autoClose={true}
-          defaultQuery={"판교역로 235"}
-        ></DaumPostCode>
-      </div>
-      {/* </div> */}
     </div>
   );
 };

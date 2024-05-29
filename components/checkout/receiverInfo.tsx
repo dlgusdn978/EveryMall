@@ -1,8 +1,11 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, {
+  useState,
+  useEffect,
+  ChangeEvent,
+  MouseEventHandler,
+} from "react";
 import AddressInfo from "../modal/addressInfo";
 import Modal from "react-modal";
-import DaumPostcode from "react-daum-postcode";
-import Input from "../input";
 import AddAddressModal from "./addAddressModal";
 export const ReceiverInfo = () => {
   const [zonecode, setZonecode] = useState("");
@@ -55,6 +58,9 @@ export const ReceiverInfo = () => {
       document.body.classList.remove("overflow-hidden");
     };
   }, [modalState]);
+  const handleModalState = () => {
+    setModalState(!modalState);
+  };
   const addressInfo = ["받는 분", "연락처", "배송 주소"];
   return (
     <div className="">
@@ -92,7 +98,6 @@ export const ReceiverInfo = () => {
       <Modal
         isOpen={modalState}
         className="border-2 overflow-hidden"
-        // parentSelector={()=>{return document.querySelector('#root')}}
         style={{
           overlay: {
             background: "rgba(34, 34, 34, 0.5)",
@@ -117,6 +122,14 @@ export const ReceiverInfo = () => {
           },
         }}
       >
+        <button
+          onClick={() => {
+            setTranslate(!translate);
+          }}
+          className={`absolute top-6 left-10 ${translate ? "block" : "hidden"}`}
+        >
+          {"뒤로가기"}
+        </button>
         <button
           onClick={() => {
             setModalState(false);
@@ -145,26 +158,19 @@ export const ReceiverInfo = () => {
             ))}
           </div>
           <div className="min-w-full px-5 py-4">
-            <AddAddressModal></AddAddressModal>
-            {/* <div className="absolute top-1/3 left-1/3 z-20 w-1/3">
-              <DaumPostcode
-                onComplete={selectAddress}
-                autoClose={false}
-                defaultQuery={"판교역로 235"}
-              ></DaumPostcode>
-            </div> */}
+            <AddAddressModal closeModal={handleModalState}></AddAddressModal>
           </div>
-        </div>
-        <div className="flex absolute bottom-0 p-5 w-full">
-          <button
-            className="w-full items-center border-2 py-5 rounded-lg"
-            onClick={() => {
-              setTranslate(!translate);
-            }}
-          >
-            <span>+</span>
-            <span>주소록 추가</span>
-          </button>
+          <div className="flex absolute bottom-0 p-5 w-full">
+            <button
+              className="w-full items-center border-2 py-5 rounded-lg"
+              onClick={() => {
+                setTranslate(!translate);
+              }}
+            >
+              <span>+</span>
+              <span>주소록 추가</span>
+            </button>
+          </div>
         </div>
       </Modal>
     </div>

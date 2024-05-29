@@ -7,7 +7,7 @@ import { useAppSelector } from "../../lib/hooks";
 import { RootState } from "../../lib/store";
 import Image from "next/image";
 import Head from "next/head";
-import DaumPostcode from "react-daum-postcode";
+
 import { useRouter } from "next/navigation";
 import { ReceiverInfo } from "../../components/checkout/receiverInfo";
 import PaymentBox from "../../components/product/paymentBox";
@@ -74,7 +74,6 @@ const Page = () => {
   const [basketList, setBasketList] = useState<ProductProps[]>([]);
   const [openPostcode, setOpenPostcode] = useState(false);
   const kakao_secret_dev = process.env.NEXT_PUBLIC_KAKAO_SECRET_KEY_DEV;
-
   const handle = {
     clickButton: () => {
       setOpenPostcode((current) => !current);
@@ -144,13 +143,6 @@ const Page = () => {
   }, []);
   return (
     <div className={`w-full [&>*]:mt-5 relative`}>
-      <Head>
-        <script
-          src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
-          defer
-        ></script>
-      </Head>
-
       <div className="">
         <h1 className="font-bold text-xl">주문 정보</h1>
         <table className="border-t-2 w-full">
@@ -315,15 +307,6 @@ const Page = () => {
       </div>
       {openPostcode && (
         <div className="absolute top-0 w-full h-full bg-black z-10 opacity-50"></div>
-      )}
-      {openPostcode && (
-        <div className="absolute top-1/3 left-1/3 z-20 w-1/3">
-          <DaumPostcode
-            // onComplete={handle.selectAddress}
-            autoClose={false}
-            defaultQuery={"판교역로 235"}
-          ></DaumPostcode>
-        </div>
       )}
     </div>
   );

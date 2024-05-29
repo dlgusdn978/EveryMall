@@ -7,6 +7,7 @@ interface InputProps {
   name?: string;
   onChange: React.ChangeEventHandler;
   readonly?: boolean;
+  width?: string;
 }
 const Input = ({
   title,
@@ -15,9 +16,10 @@ const Input = ({
   onChange,
   readonly,
   name,
+  width,
 }: InputProps) => {
   return (
-    <div className="py-5">
+    <div className={`py-5 ${width ? `w-${width}` : ""}`}>
       <h1 className="font-bold">{title}</h1>
       <input
         type="text"

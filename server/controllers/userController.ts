@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { cookies } from "next/headers";
 import { parse } from "cookie";
+import AddAddressModal from "../../components/checkout/addAddressModal";
 
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
@@ -106,7 +107,7 @@ const reissue = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 const getAllAddress = asyncHandler(async (req: Request, res: Response) => {
-  const userAddress = await getAllAddress(req.params.userId);
+  const userAddress = await User.getAllAddress(req.params.userId);
   res.json({
     status: 200,
     userAddress,
@@ -114,7 +115,8 @@ const getAllAddress = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const addAddress = asyncHandler(async (req: Request, res: Response) => {
-  const addAddressRes = await addAddress(req.body);
+  console.log(req.body);
+  const addAddressRes = await User.addAddress(req.body);
   res.json({
     status: 200,
   });

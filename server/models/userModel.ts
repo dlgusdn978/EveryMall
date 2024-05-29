@@ -61,7 +61,7 @@ const User = {
   },
   addAddress: async (req: AddressProps) => {
     return new Promise((resolve, reject) => {
-      const query = `INSERT INTO User_Address(uid, name, phone, zonecode, address, address_detail, request) VALUES('${req.userId}','${req.userName}', '${req.userPhone}', '${req.userZoneCode}', '${req.userAddress}', '${req.userAddressDetail}')`;
+      const query = `INSERT INTO User_Address(uid, name, phone, zonecode, address, address_detail, request) VALUES('${req.userId}','${req.userName}', '${req.userPhone}', '${req.userZoneCode}', '${req.userAddress}', '${req.userAddressDetail}', '${req.userRequest}')`;
       connection.query(query, (err: Error, res: Response) => {
         if (err) {
           reject(err);
