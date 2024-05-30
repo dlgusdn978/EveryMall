@@ -107,6 +107,7 @@ const reissue = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 const getAllAddress = asyncHandler(async (req: Request, res: Response) => {
+  console.log(req.params);
   const userAddress = await User.getAllAddress(req.params.userId);
   res.json({
     status: 200,

@@ -49,7 +49,7 @@ const User = {
   },
   getAllAddress: async (userId: string) => {
     return new Promise((resolve, reject) => {
-      const query = `SELECT * FROM User_Address WHERE id=${userId}`;
+      const query = `SELECT * FROM User_Address WHERE uid='${userId}'`;
       connection.query(query, (err: Error, res: Response) => {
         if (err) {
           reject(err);

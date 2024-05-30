@@ -2,14 +2,16 @@ import React from "react";
 type AddressProps = {
   userName: string;
   userPhone: string;
-  userZipcode: string;
+  userZonecode: string;
   userAddress: string;
+  userAddressDetail: string;
 };
 const AddressInfo = ({
   userName,
   userPhone,
-  userZipcode,
+  userZonecode,
   userAddress,
+  userAddressDetail,
 }: AddressProps) => {
   return (
     <div className="py-4 border-b-2 flex justify-between">
@@ -17,7 +19,7 @@ const AddressInfo = ({
         <span className="text-xl font-bold ">{userName}</span>
         <span className="text-lg text-gray-500">{userPhone}</span>
         <span className="text-gray-600">
-          {"(" + userZipcode + ")"}
+          {"(" + userZonecode + ")"}
           {userAddress}
         </span>
       </div>

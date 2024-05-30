@@ -26,7 +26,7 @@ router.route("/signUp").post(getSignUp);
 router.route("/reissue").get(reissue);
 router.route("/verifyToken").post(verifyAccessToken);
 
-router.route("/getAllAddress").get(getAllAddress);
+router.route("/user/getAllAddress/:userId").get(getAllAddress);
 router.route("/user/addAddress").post(addAddress);
 
 router.route("/carousel").get(getCarouselImg);

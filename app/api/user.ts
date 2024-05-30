@@ -50,7 +50,9 @@ export const reissue = async () => {
   }
 };
 
-export const getAddress = async () => {};
+export const getAllAddress = async (userId: string) => {
+  return CommonAPI.get(`/api/user/getAllAddress/${userId}`);
+};
 
 export const addAddress = async ({
   userId,

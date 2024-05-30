@@ -7,7 +7,18 @@ import React, {
 import AddressInfo from "../modal/addressInfo";
 import Modal from "react-modal";
 import AddAddressModal from "./addAddressModal";
+import { getAllAddress } from "../../app/api/user";
+import { useAppSelector } from "../../lib/hooks";
+import { RootState } from "../../lib/store";
+type AddressProps = {
+  userName: string;
+  userPhone: string;
+  userZonecode: string;
+  userAddress: string;
+  userAddressDetail: string;
+};
 export const ReceiverInfo = () => {
+  const user = useAppSelector((root: RootState) => root.user);
   const [zonecode, setZonecode] = useState("");
   const [address, setAddress] = useState({
     "받는 분": "이현우",
@@ -20,32 +31,7 @@ export const ReceiverInfo = () => {
   const changeName = (event: ChangeEvent<HTMLInputElement>) => {
     setUserName(event.target.value);
   };
-  const pseudoAddress = [
-    {
-      userName: "이현우",
-      userPhone: "010-1234-1234",
-      userZipcode: "01234",
-      userAddress: "서울시 강남구 테헤란로 123",
-    },
-    {
-      userName: "홍길동",
-      userPhone: "010-3333-1234",
-      userZipcode: "01234",
-      userAddress: "서울시 강남구 테헤란로 123",
-    },
-    {
-      userName: "김철수",
-      userPhone: "010-1234-1111",
-      userZipcode: "01234",
-      userAddress: "서울시 강남구 테헤란로 123",
-    },
-    {
-      userName: "짱구",
-      userPhone: "010-1277-3332",
-      userZipcode: "04531",
-      userAddress: "서울시 강남구 테헤란로 123",
-    },
-  ];
+  const [userAddressInfo, setUserAddressInfo] = useState<AddressProps[]>([]);
   const selectAddress = (data: any) => {
     setZonecode(data.zonecode);
     setAddress(data.address);
@@ -61,7 +47,24 @@ export const ReceiverInfo = () => {
   const handleModalState = () => {
     setModalState(!modalState);
   };
-  const addressInfo = ["받는 분", "연락처", "배송 주소"];
+
+  useEffect(() => {
+    getAllAddress(user.user_id).then((response) => {
+      response.data.userAddress.map((item: any, index: number) => {
+        setUserAddressInfo((prev) => [
+          ...prev,
+          {
+            userName: item.name,
+            userPhone: item.phone,
+            userZonecode: item.zonecode,
+            userAddress: item.address,
+            userAddressDetail: item.address_detail,
+          },
+        ]);
+      });
+    });
+  }, []);
+
   return (
     <div className="">
       <h1 className="font-bold text-xl">배송지 정보</h1>
@@ -142,20 +145,24 @@ export const ReceiverInfo = () => {
           <h2>주소록</h2>
         </div>
         <div
-          className={`flex transition delay-100 ${
-            translate ? "translate-x-[-100%]" : "translate-x-0"
+          className={`flex transition h-[700px] delay-100 ${
+            translate ? "translate-x-[-102%]" : "translate-x-0"
           }`}
         >
-          <div className={`px-5 py-4 min-w-full`}>
-            {pseudoAddress.map((item, index) => (
-              <AddressInfo
-                userName={item.userName}
-                userPhone={item.userPhone}
-                userAddress={item.userAddress}
-                userZipcode={item.userZipcode}
-                key={index}
-              ></AddressInfo>
-            ))}
+          <div
+            className={`px-5 py-4 mr-4 min-w-full h-[600px] overflow-y-auto scrollbar-custom`}
+          >
+            {userAddressInfo &&
+              userAddressInfo.map((item, index) => (
+                <AddressInfo
+                  userName={item.userName}
+                  userPhone={item.userPhone}
+                  userAddress={item.userAddress}
+                  userZonecode={item.userZonecode}
+                  userAddressDetail={item.userAddressDetail}
+                  key={index}
+                ></AddressInfo>
+              ))}
           </div>
           <div className="min-w-full px-5 py-4">
             <AddAddressModal closeModal={handleModalState}></AddAddressModal>
