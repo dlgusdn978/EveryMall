@@ -100,6 +100,7 @@ export const ReceiverInfo = () => {
       </div>
 
       <Modal
+        ariaHideApp={false}
         isOpen={modalState}
         className="border-2 overflow-hidden"
         style={{
