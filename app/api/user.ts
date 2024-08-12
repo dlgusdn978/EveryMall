@@ -73,3 +73,8 @@ export const addAddress = async ({
     userRequest,
   });
 };
+
+export const deleteAddress = async (addressId: number) => {
+  console.log("????");
+  return CommonAPI.delete(`/api/user/deleteAddress/${addressId}`);
+};

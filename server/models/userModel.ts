@@ -70,6 +70,18 @@ const User = {
       });
     });
   },
+  deleteAddress: async (req: number) => {
+    console.log(req);
+    return new Promise((resolve, reject) => {
+      const query = `Delete From User_Address Where aid=${req}`;
+      connection.query(query, (err: Error, res: Response) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(res);
+      });
+    });
+  },
 };
 
 module.exports = User;

@@ -16,6 +16,7 @@ type AddressProps = {
   userZonecode: string;
   userAddress: string;
   userAddressDetail: string;
+  userAddressId: number;
 };
 export const ReceiverInfo = () => {
   const user = useAppSelector((root: RootState) => root.user);
@@ -36,6 +37,26 @@ export const ReceiverInfo = () => {
     setZonecode(data.zonecode);
     setAddress(data.address);
   };
+  const getAddressList = () => {
+    setModalState(true);
+    console.log("onclick");
+    getAllAddress(user.user_id).then((response) => {
+      console.log("주소록 개수");
+      const userAddress = response.data.userAddress.map(
+        (item: any, index: number) => {
+          return {
+            userName: item.name,
+            userPhone: item.phone,
+            userZonecode: item.zonecode,
+            userAddress: item.address,
+            userAddressDetail: item.address_detail,
+            userAddressId: item.aid,
+          };
+        }
+      );
+      setUserAddressInfo(userAddress);
+    });
+  };
   useEffect(() => {
     if (modalState) document.body.classList.add("overflow-hidden");
     else document.body.classList.remove("oveflow-hidden");
@@ -47,24 +68,6 @@ export const ReceiverInfo = () => {
   const handleModalState = () => {
     setModalState(!modalState);
   };
-
-  useEffect(() => {
-    getAllAddress(user.user_id).then((response) => {
-      response.data.userAddress.map((item: any, index: number) => {
-        setUserAddressInfo((prev) => [
-          ...prev,
-          {
-            userName: item.name,
-            userPhone: item.phone,
-            userZonecode: item.zonecode,
-            userAddress: item.address,
-            userAddressDetail: item.address_detail,
-          },
-        ]);
-      });
-    });
-  }, []);
-
   return (
     <div className="">
       <h1 className="font-bold text-xl">배송지 정보</h1>
@@ -84,9 +87,7 @@ export const ReceiverInfo = () => {
 
         <button
           className="absolute right-5 top-1/4 border-2 px-4 py-3 rounded-lg"
-          onClick={() => {
-            setModalState(true);
-          }}
+          onClick={() => getAddressList()}
         >
           변경
         </button>
@@ -160,6 +161,7 @@ export const ReceiverInfo = () => {
                   userAddress={item.userAddress}
                   userZonecode={item.userZonecode}
                   userAddressDetail={item.userAddressDetail}
+                  userAddressId={item.userAddressId}
                   key={index}
                 ></AddressInfo>
               ))}

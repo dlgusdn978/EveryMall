@@ -8,6 +8,7 @@ const {
   verifyAccessToken,
   addAddress,
   getAllAddress,
+  deleteAddress,
 } = require("../controllers/userController");
 const {
   getCarouselImg,
@@ -28,6 +29,7 @@ router.route("/verifyToken").post(verifyAccessToken);
 
 router.route("/user/getAllAddress/:userId").get(getAllAddress);
 router.route("/user/addAddress").post(addAddress);
+router.route(`/user/deleteAddress/:addressId`).delete(deleteAddress);
 
 router.route("/carousel").get(getCarouselImg);
 router.route("/main").get(getMainProduct);

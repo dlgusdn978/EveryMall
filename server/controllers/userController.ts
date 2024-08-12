@@ -122,6 +122,14 @@ const addAddress = asyncHandler(async (req: Request, res: Response) => {
     status: 200,
   });
 });
+
+const deleteAddress = asyncHandler(async (req: Request, res: Response) => {
+  console.log(req.params);
+  const deleteAddressRes = await User.deleteAddress(req.params.addressId);
+  res.json({
+    status: 200,
+  });
+});
 module.exports = {
   getLogin,
   getSignUp,
@@ -129,4 +137,5 @@ module.exports = {
   verifyAccessToken,
   getAllAddress,
   addAddress,
+  deleteAddress,
 };
