@@ -9,35 +9,39 @@ type CarouselProps = {
 };
 const Carousel = () => {
   const [imgList, setImgList] = useState<CarouselProps[]>([]);
+  const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
   const [count, setCount] = useState(0);
+
   useEffect(() => {
     const timer = setInterval(() => {
       imgList && setCount((prev) => (prev + 1) % imgList.length);
     }, 7000);
-    console.log(count);
     return () => {
       clearInterval(timer);
     };
   }, [imgList]);
   useEffect(() => {
-    getCarouselImg().then((response) => {
-      console.log(response.data.imgs);
-      setImgList(response.data.imgs);
-    });
+    if (imgList.length == 0)
+      getCarouselImg().then((response) => {
+        setImgList(response.data.imgs);
+      });
   }, []);
   return (
     <div className="relative m-auto h-96 flex">
       <div>
-        {imgList && imgList[count] && (
-          <Image
-            alt="carouselImg"
-            src={imgList[count].link}
-            width={1700}
-            height={500}
-            className="object-cover object-center h-96 overflow-hidden "
-            unoptimized
-          ></Image>
-        )}
+        {imgList &&
+          imgList.map((value: CarouselProps, index: number) => (
+            <Image
+              alt="carouselImg"
+              key={index}
+              src={value.link}
+              width={1700}
+              height={500}
+              className={`object-cover object-center h-96 overflow-hidden 
+                ${index == count ? "block" : "hidden"}
+                `}
+            ></Image>
+          ))}
         <div className="absolute w-56  top-16 right-48 z-10 bg-white rounded-sm shadow-2xl ">
           <ul className="[&>*]:border-b-2  [&>*]:px-5 [&>*]:py-5 last:border-0 font-bold text-gray-500 cursor-pointer">
             {imgList &&
